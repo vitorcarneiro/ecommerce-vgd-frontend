@@ -2,23 +2,24 @@
 
 :root {
   --white: #ffffff;
-  --black: #000000;
-  --purple: #8c11be;
-  --light-purple: #a328d6;
+  --black: #0c0100;
   --gray: #c6c6c6;
   --green: #03ac00;
   --red: #c70000;
+  --blue: #0057b8;
+  --yellow: #fbc815;
 }
 
 * {
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
 }
 
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+body,
+html {
+  width: 100%;
+  height: 100%;
 }
 
 html {
