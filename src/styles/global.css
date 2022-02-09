@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@400;700&family=Saira+Stencil+One&display=swap");
+
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --purple: #8c11be;
+  --light-purple: #a328d6;
+  --gray: #c6c6c6;
+  --green: #03ac00;
+  --red: #c70000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+html {
+  overflow: scroll;
+}
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+a,
+span,
+button,
+input,
+select,
+textarea {
+  font-family: "Raleway", sans-serif;
+}
