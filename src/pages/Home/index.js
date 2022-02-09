@@ -220,7 +220,6 @@ const ProductContainer = styled.div`
 `;
 
 
-
 const Specs = styled.div`
     width: 100%;
     height: 30%;
