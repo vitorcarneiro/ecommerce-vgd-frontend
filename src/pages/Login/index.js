@@ -8,6 +8,7 @@ import {
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import { signIn } from "../../services/api.js";
+import logo from "../../assets/Images/logo-meu-velho-rosto.png";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -32,7 +33,7 @@ export default function Login() {
   return (
     <>
       <Container>
-        <h1>Meu Velho</h1>
+        <img src={logo} alt="logo" />
         <h2>Login</h2>
         <Form onSubmit={handleSubmit}>
           <Input

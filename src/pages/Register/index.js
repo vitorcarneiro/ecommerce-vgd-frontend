@@ -7,6 +7,7 @@ import {
   Input,
   StyledLink,
 } from "../../components/FormComponents";
+import logo from "../../assets/Images/logo-meu-velho-rosto.png";
 
 import { signUp } from "../../services/api.js";
 import { useNavigate } from "react-router";
@@ -54,7 +55,7 @@ export default function Register() {
   return (
     <>
       <Container>
-        <h1>Meu Velho (LOGO)</h1>
+        <img src={logo} alt="logo" />
         <h2>Cadastro</h2>
         <Form onSubmit={handleSubmit}>
           <Input
