@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useNavigate } from "react-router";
 
-import { BsPlusSquareFill } from "react-icons/bs";
+import { BsPlusSquareFill, BsSearch } from "react-icons/bs";
 import bigLogo from "../../assets/images/logo-meu-velho-completo.png";
 
 
@@ -12,9 +12,33 @@ export default function Home() {
                 <img alt="logo" src={bigLogo} />
             </TopBar>
 
-            <input type='text'></input>
-            <Welcome>
-            </Welcome>
+            <FindProductBar>
+                <SearchBar
+                    type='search'
+                    placeholder='O que você está procurando?'
+                />
+
+                <BsSearch />
+            </FindProductBar>
+
+            <NavBar>
+                <div className='geral'>
+                    GERAL
+                </div>
+                
+                <div className='pintura'>
+                    PINTURA
+                </div>
+
+                <div className='eletrica'>
+                    ELÉTRICA
+                </div>
+
+                <div className='hidraulica'>
+                    HIDRÁULICA
+                </div>
+
+            </NavBar>
 
             <Highlights>
                 <h1>Destaques</h1>
@@ -242,7 +266,7 @@ const Container = styled.main`
     height: 100vh;
 
     box-sizing: border-box;
-    padding: 200px 15px;
+    padding: 200px 10px;
     overflow-y: scroll;
     
     background-color: #FFF;
@@ -250,12 +274,28 @@ const Container = styled.main`
     font-family: 'Montserrat', sans-serif;
 `;
 
-const Welcome = styled.div`
-    img {
-        height: 100px;
+const NavBar = styled.div`
+    width: 100%;
+    height: 15px;
+    margin-bottom: 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    color: #757575;
+    font-weight: 700;
+
+    div {
+        cursor: pointer;
     }
 
+    .geral {
+        color: #004BD8;
+        border-bottom: 3px solid #004BD8;
+    }
 `;
+
 
 const FooterBar = styled.footer`
     position: fixed;
@@ -263,7 +303,7 @@ const FooterBar = styled.footer`
     left: 0;
 
     width: 100%;
-    height: 100px;
+    height: 80px;
 
     background-color: lightblue;
 `;
@@ -275,7 +315,7 @@ const TopBar = styled.header`
     left: 0;
 
     width: 100%;
-    height: 100px;
+    height: 90px;
     background-color: #FFF;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
 
@@ -343,7 +383,6 @@ const ProductContainer = styled.div`
     }
 `;
 
-
 const Specs = styled.div`
     width: 100%;
     height: 30%;
@@ -404,7 +443,7 @@ const OthersProductsContainer = styled.div`
 `;
 
 const OtherProduct = styled.div`
-    width: 170px;
+    width: 48%;
     height: 270px;
 
     border-radius: 5px;
@@ -426,3 +465,31 @@ const OtherProduct = styled.div`
         overflow: hidden;
     }
 `;
+
+const FindProductBar = styled.div`
+    position: relative;
+    margin-bottom: 20px;
+
+    svg {
+        position: absolute;
+        top: 13px;
+        left: 13px;
+        color: #757575;
+    }
+`;
+
+const SearchBar = styled.input`
+    height: 40px;
+    width: 100%;
+
+    background-color: #F1F1F1;
+    border: 1px solid #FFFFFF;
+    box-sizing: border-box;
+    border-radius: 5px;
+
+    padding: 10px 10px 10px 40px;
+    font-size: 15px;
+    line-height: 25px;
+    color: black;
+`;
+
