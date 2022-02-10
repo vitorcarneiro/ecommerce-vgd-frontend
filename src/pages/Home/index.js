@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { useNavigate } from "react-router";
+
 import { BsPlusSquareFill } from "react-icons/bs";
 import bigLogo from "../../assets/images/logo-meu-velho-completo.png";
 
@@ -10,6 +12,7 @@ export default function Home() {
                 <img alt="logo" src={bigLogo} />
             </TopBar>
 
+            <input type='text'></input>
             <Welcome>
             </Welcome>
 
@@ -29,11 +32,11 @@ export default function Home() {
                     </ProductContainer>
                     
                     <ProductContainer>
-                        <img alt="alicate" src="https://img.irroba.com.br/fit-in/400x400/filters:fill(fff):quality(95)/casadasc/catalog/makita/cipatex/gedore/alicate.jpg"/>
+                        <img alt="alicate" src="https://telhanorte.vteximg.com.br/arquivos/ids/339147-NaN-NaN/1399551.jpg?v=636927466688400000"/>
                     
                         <Specs>
-                            <h1>Alicate pra gatonet</h1>
-                            <p>R$ 29,90</p>
+                            <h1>Disjuntor pra não ficar sem gato</h1>
+                            <p>R$ 59,90</p>
                         
                             <BsPlusSquareFill/>
                             
@@ -75,10 +78,154 @@ export default function Home() {
                             
                         </Specs>
                     </ProductContainer>
-                    
-                    
                 </ProductsView>
             </Highlights>
+
+            <OthersProductsContainer>
+                <OtherProduct>
+                    <img alt="alicate" src="https://picsum.photos/300/300"/>
+                
+                    <Specs>
+                        <h1>Alicate pra gatonet</h1>
+                        <p>R$ 29,90</p>
+                    
+                        <BsPlusSquareFill className='small'/>
+                        
+                    </Specs>
+                </OtherProduct>
+
+                
+                <OtherProduct>
+                    <img alt="alicate" src="https://picsum.photos/300/300"/>
+                
+                    <Specs>
+                        <h1>Alicate pra gatonet</h1>
+                        <p>R$ 29,90</p>
+                    
+                        <BsPlusSquareFill className='small'/>
+                        
+                    </Specs>
+                </OtherProduct>
+
+                
+                <OtherProduct>
+                    <img alt="alicate" src="https://picsum.photos/300/300"/>
+                
+                    <Specs>
+                        <h1>Alicate pra gatonet</h1>
+                        <p>R$ 29,90</p>
+                    
+                        <BsPlusSquareFill className='small'/>
+                        
+                    </Specs>
+                </OtherProduct>
+
+                
+                <OtherProduct>
+                    <img alt="alicate" src="https://picsum.photos/300/300"/>
+                
+                    <Specs>
+                        <h1>Alicate pra gatonet</h1>
+                        <p>R$ 29,90</p>
+                    
+                        <BsPlusSquareFill className='small'/>
+                        
+                    </Specs>
+                </OtherProduct>
+
+                
+                <OtherProduct>
+                    <img alt="alicate" src="https://picsum.photos/300/300"/>
+                
+                    <Specs>
+                        <h1>Alicate pra gatonet</h1>
+                        <p>R$ 29,90</p>
+                    
+                        <BsPlusSquareFill className='small'/>
+                        
+                    </Specs>
+                </OtherProduct>
+
+                
+                <OtherProduct>
+                    <img alt="alicate" src="https://picsum.photos/300/300"/>
+                
+                    <Specs>
+                        <h1>Alicate pra gatonet</h1>
+                        <p>R$ 29,90</p>
+                    
+                        <BsPlusSquareFill className='small'/>
+                        
+                    </Specs>
+                </OtherProduct>
+
+                
+                <OtherProduct>
+                    <img alt="alicate" src="https://picsum.photos/300/300"/>
+                
+                    <Specs>
+                        <h1>Alicate pra gatonet</h1>
+                        <p>R$ 29,90</p>
+                    
+                        <BsPlusSquareFill className='small'/>
+                        
+                    </Specs>
+                </OtherProduct>
+
+                
+                <OtherProduct>
+                    <img alt="alicate" src="https://picsum.photos/300/300"/>
+                
+                    <Specs>
+                        <h1>Alicate pra gatonet</h1>
+                        <p>R$ 29,90</p>
+                    
+                        <BsPlusSquareFill className='small'/>
+                        
+                    </Specs>
+                </OtherProduct>
+
+                
+                <OtherProduct>
+                    <img alt="alicate" src="https://picsum.photos/300/300"/>
+                
+                    <Specs>
+                        <h1>Alicate pra gatonet</h1>
+                        <p>R$ 29,90</p>
+                    
+                        <BsPlusSquareFill className='small'/>
+                        
+                    </Specs>
+                </OtherProduct>
+
+                
+                <OtherProduct>
+                    <img alt="alicate" src="https://picsum.photos/300/300"/>
+                
+                    <Specs>
+                        <h1>Alicate pra gatonet</h1>
+                        <p>R$ 29,90</p>
+                    
+                        <BsPlusSquareFill className='small'/>
+                        
+                    </Specs>
+                </OtherProduct>
+
+                
+                <OtherProduct>
+                    <img alt="alicate" src="https://picsum.photos/300/300"/>
+                
+                    <Specs>
+                        <h1>Alicate pra gatonet</h1>
+                        <p>R$ 29,90</p>
+                    
+                        <BsPlusSquareFill className='small'/>
+                        
+                    </Specs>
+                </OtherProduct>
+
+                
+            </OthersProductsContainer>
 
             <FooterBar>
                 Footer
@@ -96,9 +243,9 @@ const Container = styled.main`
 
     box-sizing: border-box;
     padding: 200px 15px;
-    overflow: hidden;
+    overflow-y: scroll;
     
-    background-color: #f7f7f7;
+    background-color: #FFF;
 
     font-family: 'Montserrat', sans-serif;
 `;
@@ -123,11 +270,14 @@ const FooterBar = styled.footer`
 
 const TopBar = styled.header`
     position: fixed;
+    z-index: 1;
     top: 0;
     left: 0;
 
     width: 100%;
     height: 100px;
+    background-color: #FFF;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
 
     padding: 0 15px;
     box-sizing: border-box;
@@ -165,7 +315,6 @@ const ProductsView = styled.div`
     gap: 20px;
 
     overflow-x: scroll;
-
 `;
 
 
@@ -205,6 +354,8 @@ const Specs = styled.div`
     display: flex;
     flex-direction: column;
 
+    position: relative;
+
     h1 {
         margin: 0;
         font-weight: 600;
@@ -216,7 +367,7 @@ const Specs = styled.div`
     
     p {
         margin: 10px 0 0 0;
-        font-weight: bold;
+        font-weight: 1000;
         color: #004BD8;
     }
 
@@ -226,8 +377,52 @@ const Specs = styled.div`
 
         color: #004BD8;
 
-        align-self: end;
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
 
         cursor: pointer;
+    }
+
+    .small {
+        width: 25px;
+        height: 25px;
+
+        bottom: 10px;
+        right: 10px;
+    }
+`;
+
+const OthersProductsContainer = styled.div`
+    width: 100%;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+
+`;
+
+const OtherProduct = styled.div`
+    width: 170px;
+    height: 270px;
+
+    border-radius: 5px;
+    background-color: #F1F1F1;
+
+    padding: 10px;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    img {
+        width: 150px;
+        border-radius: 5px;
+        object-fit: contain;
+        background-color: white;
+        overflow: hidden;
     }
 `;
