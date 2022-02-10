@@ -8,7 +8,7 @@ import {
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import { signIn } from "../../services/api.js";
-import logo from "../../assets/Images/logo-meu-velho-rosto.png";
+import logo from "../../assets/images/logo-meu-velho-rosto.png";
 
 export default function Login() {
   const [email, setEmail] = useState("");

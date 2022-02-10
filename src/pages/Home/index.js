@@ -1,11 +1,17 @@
 import styled from 'styled-components';
+import { BsPlusSquareFill } from "react-icons/bs";
+import bigLogo from "../../assets/images/logo-meu-velho-completo.png";
+
 
 export default function Home() {
     return (
         <Container>
             <TopBar>
-                Header
+                <img alt="logo" src={bigLogo} />
             </TopBar>
+
+            <Welcome>
+            </Welcome>
 
             <Highlights>
                 <h1>Destaques</h1>
@@ -16,9 +22,9 @@ export default function Home() {
                         <Specs>
                             <h1>Alicate pra gatonet</h1>
                             <p>R$ 29,90</p>
-                            <div>
-                                +
-                            </div>
+                        
+                            <BsPlusSquareFill/>
+                            
                         </Specs>
                     </ProductContainer>
                     
@@ -28,9 +34,9 @@ export default function Home() {
                         <Specs>
                             <h1>Alicate pra gatonet</h1>
                             <p>R$ 29,90</p>
-                            <div>
-                                +
-                            </div>
+                        
+                            <BsPlusSquareFill/>
+                            
                         </Specs>
                     </ProductContainer>
                     
@@ -40,9 +46,9 @@ export default function Home() {
                         <Specs>
                             <h1>Alicate pra gatonet</h1>
                             <p>R$ 29,90</p>
-                            <div>
-                                +
-                            </div>
+                        
+                            <BsPlusSquareFill/>
+                            
                         </Specs>
                     </ProductContainer>
                     
@@ -52,9 +58,9 @@ export default function Home() {
                         <Specs>
                             <h1>Alicate pra gatonet</h1>
                             <p>R$ 29,90</p>
-                            <div>
-                                +
-                            </div>
+                        
+                            <BsPlusSquareFill/>
+                            
                         </Specs>
                     </ProductContainer>
                     
@@ -64,57 +70,9 @@ export default function Home() {
                         <Specs>
                             <h1>Alicate pra gatonet</h1>
                             <p>R$ 29,90</p>
-                            <div>
-                                +
-                            </div>
-                        </Specs>
-                    </ProductContainer>
-                    
-                    <ProductContainer>
-                        <img alt="alicate" src="https://img.irroba.com.br/fit-in/400x400/filters:fill(fff):quality(95)/casadasc/catalog/makita/cipatex/gedore/alicate.jpg"/>
-                    
-                        <Specs>
-                            <h1>Alicate pra gatonet</h1>
-                            <p>R$ 29,90</p>
-                            <div>
-                                +
-                            </div>
-                        </Specs>
-                    </ProductContainer>
-                    
-                    <ProductContainer>
-                        <img alt="alicate" src="https://img.irroba.com.br/fit-in/400x400/filters:fill(fff):quality(95)/casadasc/catalog/makita/cipatex/gedore/alicate.jpg"/>
-                    
-                        <Specs>
-                            <h1>Alicate pra gatonet</h1>
-                            <p>R$ 29,90</p>
-                            <div>
-                                +
-                            </div>
-                        </Specs>
-                    </ProductContainer>
-                    
-                    <ProductContainer>
-                        <img alt="alicate" src="https://img.irroba.com.br/fit-in/400x400/filters:fill(fff):quality(95)/casadasc/catalog/makita/cipatex/gedore/alicate.jpg"/>
-                    
-                        <Specs>
-                            <h1>Alicate pra gatonet</h1>
-                            <p>R$ 29,90</p>
-                            <div>
-                                +
-                            </div>
-                        </Specs>
-                    </ProductContainer>
-                    
-                    <ProductContainer>
-                        <img alt="alicate" src="https://img.irroba.com.br/fit-in/400x400/filters:fill(fff):quality(95)/casadasc/catalog/makita/cipatex/gedore/alicate.jpg"/>
-                    
-                        <Specs>
-                            <h1>Alicate pra gatonet</h1>
-                            <p>R$ 29,90</p>
-                            <div>
-                                +
-                            </div>
+                        
+                            <BsPlusSquareFill/>
+                            
                         </Specs>
                     </ProductContainer>
                     
@@ -140,12 +98,17 @@ const Container = styled.main`
     padding: 200px 15px;
     overflow: hidden;
     
-    background-color: #D3D3D3;
+    background-color: #f7f7f7;
 
     font-family: 'Montserrat', sans-serif;
 `;
 
+const Welcome = styled.div`
+    img {
+        height: 100px;
+    }
 
+`;
 
 const FooterBar = styled.footer`
     position: fixed;
@@ -166,7 +129,19 @@ const TopBar = styled.header`
     width: 100%;
     height: 100px;
 
-    background-color: lightcoral;
+    padding: 0 15px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+
+    border-bottom: 2px solid #004BD8;
+    
+    img {
+        height: 70px;
+        align-self: start;
+        margin-top: 5px;
+    }
 `;
 
 const Highlights = styled.div`
@@ -245,18 +220,11 @@ const Specs = styled.div`
         color: #004BD8;
     }
 
-    div {
+    svg {
         width: 35px;
         height: 35px;
 
-        background-color: #004BD8;
-        border-radius: 5px;
-
-        color: #FFF;
-        text-align: center;
-        line-height: 35px;
-        font-size: 35px;
-        font-weight: 700;
+        color: #004BD8;
 
         align-self: end;
 
