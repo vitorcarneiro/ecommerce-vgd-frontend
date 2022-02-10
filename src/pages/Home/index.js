@@ -364,6 +364,7 @@ const NavBar = styled.div`
 
     color: #757575;
     font-weight: 700;
+    font-size: 14px;
 
     div {
         cursor: pointer;
