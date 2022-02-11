@@ -13,6 +13,9 @@ import { getProducts } from '../../services/api.js';
 export default function Home() {
     const [isLoading, setIsLoading] = useState(false);
     const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [typeFilter, setTypeFilter] = useState('GERAL');
 
     useEffect(() => {
         setIsLoading(true);
@@ -33,6 +36,28 @@ export default function Home() {
 
     }, []);
 
+    function typeFilterProducts(product) {
+        if (typeFilter === 'GERAL') {
+            setFilteredProducts(...products);
+
+        } else {
+            setFilteredProducts(products.filter( (product) => product.type.toLowerCase() === typeFilter.toLowerCase() ))
+        }
+
+    }
+
+    function searchFilterProducts(product) {
+        if (searchTerm === "") {
+            return product;
+
+        } else if (product.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+            return product;
+
+        }
+
+        return 0;
+    }
+
     return (
         <Container>
             <TopBar>
@@ -52,34 +77,6 @@ export default function Home() {
                 />
             </VideoContainer>
             
-            <FindProductBar>
-                <SearchBar
-                    type='search'
-                    placeholder='O que você está procurando?'
-                />
-
-                <BsSearch />
-            </FindProductBar>
-
-            <NavBar>
-                <div className='geral'>
-                    GERAL
-                </div>
-                
-                <div className='pintura'>
-                    PINTURA
-                </div>
-
-                <div className='eletrica'>
-                    ELÉTRICA
-                </div>
-
-                <div className='hidraulica'>
-                    HIDRÁULICA
-                </div>
-
-            </NavBar>
-
             <HighlightsContainer>
                 <h1>Destaques</h1>
                 <ProductsHilight hasData={products.length !== 0}>
@@ -101,9 +98,39 @@ export default function Home() {
                 </ProductsHilight>
             </HighlightsContainer>
 
+            <FindProductBar>
+                <SearchBar
+                    type='search'
+                    placeholder='O que você está procurando?'
+                    onChange={event => {setSearchTerm(event.target.value)}}
+                />
+
+                <BsSearch />
+            </FindProductBar>
+            
+            <NavBar typeFilter={typeFilter}>
+                <div className='geral' onClick={() => setTypeFilter('GERAL')}>
+                    GERAL
+                </div>
+                
+                <div className='pintura' onClick={() => setTypeFilter('PINTURA')}>
+                    PINTURA
+                </div>
+
+                <div className='eletrica' onClick={() => setTypeFilter('ELETRICA')}>
+                    ELÉTRICA
+                </div>
+
+                <div className='hidraulica' onClick={() => setTypeFilter('HIDRAULICA')}>
+                    HIDRÁULICA
+                </div>
+            </NavBar>
+
             <OthersProductsContainer hasData={products.length !== 0}>
                 {products.length !== 0 &&
-                    products.map((product) =>
+                    products
+                    .filter((product) => searchFilterProducts(product))
+                    .map((product) =>
                         <OtherProduct>
                             <img alt={product.name} src={product.img}/>
                         
@@ -166,7 +193,10 @@ const VideoContainer = styled.div`
     height: auto !important;
     overflow: hidden;
 
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #004BD8;
+
     video {
         border-radius: 15px;
     }
@@ -174,7 +204,7 @@ const VideoContainer = styled.div`
 
 const FindProductBar = styled.div`
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 
     svg {
         position: absolute;
@@ -216,12 +246,11 @@ const NavBar = styled.div`
         cursor: pointer;
     }
 
-    .geral {
+    .${({typeFilter}) => typeFilter.toLowerCase()} {
         color: #004BD8;
         border-bottom: 3px solid #004BD8;
     }
 `;
-
 
 const HighlightsContainer = styled.div`
     height: 420px;
