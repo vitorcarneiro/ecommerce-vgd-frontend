@@ -1,12 +1,63 @@
+import { useState, useEffect } from "react";
 import styled from 'styled-components';
 import { useNavigate } from "react-router";
-
+import ReactPlayer from "react-player";
 import { BsPlusSquareFill, BsSearch } from "react-icons/bs";
+
 import bigLogo from "../../assets/images/logo-meu-velho-completo.png";
 import video from "../../assets/videos/instagram-video.mp4";
-import ReactPlayer from "react-player";
+
+import { getProducts } from '../../services/api.js';
+
 
 export default function Home() {
+    const [isLoading, setIsLoading] = useState(false);
+    const [products, setProducts] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [typeFilter, setTypeFilter] = useState('GERAL');
+
+    useEffect(() => {
+        setIsLoading(true);
+        const promise = getProducts();
+
+        promise.then((response) => {
+            setIsLoading(false);
+            setProducts([...response.data]);
+        });
+
+        promise.catch((error) => {
+            alert(`STATUS: ${error.response.statusText} (${error.response.status})
+            
+            ${error.response.data}
+            `);
+            setIsLoading(false);
+        });
+
+    }, []);
+
+    function typeFilterProducts(product) {
+        if (typeFilter === 'GERAL') {
+            setFilteredProducts(...products);
+
+        } else {
+            setFilteredProducts(products.filter( (product) => product.type.toLowerCase() === typeFilter.toLowerCase() ))
+        }
+
+    }
+
+    function searchFilterProducts(product) {
+        if (searchTerm === "") {
+            return product;
+
+        } else if (product.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+            return product;
+
+        }
+
+        return 0;
+    }
+
     return (
         <Container>
             <TopBar>
@@ -23,253 +74,75 @@ export default function Home() {
                     playIcon={true}
                     width="100%"
                     height="100%"
-                >
-                </ReactPlayer>
+                />
             </VideoContainer>
             
+            <HighlightsContainer>
+                <h1>Destaques</h1>
+                <ProductsHilight hasData={products.length !== 0}>
+                    {products.length !== 0 &&
+                        products.map((product) =>
+                            product.isHighLight === true && 
+                            (
+                                <ProductContainer>
+                                <img alt={product.name} src={product.img}/>
+                        
+                                <Specs>
+                                    <h1>{product.name}</h1>
+                                    <p>{product.price.toFixed(2).replace('.', ',')}</p>
+                                
+                                    <BsPlusSquareFill/>
+                                </Specs>
+                            </ProductContainer>
+                    ))}
+                </ProductsHilight>
+            </HighlightsContainer>
 
             <FindProductBar>
                 <SearchBar
                     type='search'
                     placeholder='O que você está procurando?'
+                    onChange={event => {setSearchTerm(event.target.value)}}
                 />
 
                 <BsSearch />
             </FindProductBar>
-
-            <NavBar>
-                <div className='geral'>
+            
+            <NavBar typeFilter={typeFilter}>
+                <div className='geral' onClick={() => setTypeFilter('GERAL')}>
                     GERAL
                 </div>
                 
-                <div className='pintura'>
+                <div className='pintura' onClick={() => setTypeFilter('PINTURA')}>
                     PINTURA
                 </div>
 
-                <div className='eletrica'>
+                <div className='eletrica' onClick={() => setTypeFilter('ELETRICA')}>
                     ELÉTRICA
                 </div>
 
-                <div className='hidraulica'>
+                <div className='hidraulica' onClick={() => setTypeFilter('HIDRAULICA')}>
                     HIDRÁULICA
                 </div>
-
             </NavBar>
 
-            <HighlightsContainer>
-                <h1>Destaques</h1>
-                <ProductsHilight>
-                    <ProductContainer>
-                        <img alt="alicate" src="https://img.irroba.com.br/fit-in/400x400/filters:fill(fff):quality(95)/casadasc/catalog/makita/cipatex/gedore/alicate.jpg"/>
-                    
-                        <Specs>
-                            <h1>Alicate pra gatonet</h1>
-                            <p>R$ 29,90</p>
+            <OthersProductsContainer hasData={products.length !== 0}>
+                {products.length !== 0 &&
+                    products
+                    .filter((product) => searchFilterProducts(product))
+                    .map((product) =>
+                        <OtherProduct>
+                            <img alt={product.name} src={product.img}/>
                         
-                            <BsPlusSquareFill/>
+                            <Specs className='small'>
+                                <h1>{product.name}</h1>
+                                <p>{product.price.toFixed(2).replace('.', ',')}</p>
                             
-                        </Specs>
-                    </ProductContainer>
-                    
-                    <ProductContainer>
-                        <img alt="alicate" src="https://telhanorte.vteximg.com.br/arquivos/ids/339147-NaN-NaN/1399551.jpg?v=636927466688400000"/>
-                    
-                        <Specs>
-                            <h1>Disjuntor pra não ficar sem gato</h1>
-                            <p>R$ 59,90</p>
-                        
-                            <BsPlusSquareFill/>
-                            
-                        </Specs>
-                    </ProductContainer>
-                    
-                    <ProductContainer>
-                        <img alt="alicate" src="https://img.irroba.com.br/fit-in/400x400/filters:fill(fff):quality(95)/casadasc/catalog/makita/cipatex/gedore/alicate.jpg"/>
-                    
-                        <Specs>
-                            <h1>Alicate pra gatonet</h1>
-                            <p>R$ 29,90</p>
-                        
-                            <BsPlusSquareFill/>
-                            
-                        </Specs>
-                    </ProductContainer>
-                    
-                    <ProductContainer>
-                        <img alt="alicate" src="https://img.irroba.com.br/fit-in/400x400/filters:fill(fff):quality(95)/casadasc/catalog/makita/cipatex/gedore/alicate.jpg"/>
-                    
-                        <Specs>
-                            <h1>Alicate pra gatonet</h1>
-                            <p>R$ 29,90</p>
-                        
-                            <BsPlusSquareFill/>
-                            
-                        </Specs>
-                    </ProductContainer>
-                    
-                    <ProductContainer>
-                        <img alt="alicate" src="https://img.irroba.com.br/fit-in/400x400/filters:fill(fff):quality(95)/casadasc/catalog/makita/cipatex/gedore/alicate.jpg"/>
-                    
-                        <Specs>
-                            <h1>Alicate pra gatonet</h1>
-                            <p>R$ 29,90</p>
-                        
-                            <BsPlusSquareFill/>
-                            
-                        </Specs>
-                    </ProductContainer>
-                </ProductsHilight>
-            </HighlightsContainer>
-
-            <OthersProductsContainer>
-                <OtherProduct>
-                    <img alt="alicate" src="https://picsum.photos/300/300"/>
-                
-                    <Specs>
-                        <h1>Alicate pra gatonet</h1>
-                        <p>R$ 29,90</p>
-                    
-                        <BsPlusSquareFill className='small'/>
-                        
-                    </Specs>
-                </OtherProduct>
-
-                
-                <OtherProduct>
-                    <img alt="alicate" src="https://picsum.photos/300/300"/>
-                
-                    <Specs>
-                        <h1>Alicate pra gatonet</h1>
-                        <p>R$ 29,90</p>
-                    
-                        <BsPlusSquareFill className='small'/>
-                        
-                    </Specs>
-                </OtherProduct>
-
-                
-                <OtherProduct>
-                    <img alt="alicate" src="https://picsum.photos/300/300"/>
-                
-                    <Specs>
-                        <h1>Alicate pra gatonet</h1>
-                        <p>R$ 29,90</p>
-                    
-                        <BsPlusSquareFill className='small'/>
-                        
-                    </Specs>
-                </OtherProduct>
-
-                
-                <OtherProduct>
-                    <img alt="alicate" src="https://picsum.photos/300/300"/>
-                
-                    <Specs>
-                        <h1>Alicate pra gatonet</h1>
-                        <p>R$ 29,90</p>
-                    
-                        <BsPlusSquareFill className='small'/>
-                        
-                    </Specs>
-                </OtherProduct>
-
-                
-                <OtherProduct>
-                    <img alt="alicate" src="https://picsum.photos/300/300"/>
-                
-                    <Specs>
-                        <h1>Alicate pra gatonet</h1>
-                        <p>R$ 29,90</p>
-                    
-                        <BsPlusSquareFill className='small'/>
-                        
-                    </Specs>
-                </OtherProduct>
-
-                
-                <OtherProduct>
-                    <img alt="alicate" src="https://picsum.photos/300/300"/>
-                
-                    <Specs>
-                        <h1>Alicate pra gatonet</h1>
-                        <p>R$ 29,90</p>
-                    
-                        <BsPlusSquareFill className='small'/>
-                        
-                    </Specs>
-                </OtherProduct>
-
-                
-                <OtherProduct>
-                    <img alt="alicate" src="https://picsum.photos/300/300"/>
-                
-                    <Specs>
-                        <h1>Alicate pra gatonet</h1>
-                        <p>R$ 29,90</p>
-                    
-                        <BsPlusSquareFill className='small'/>
-                        
-                    </Specs>
-                </OtherProduct>
-
-                
-                <OtherProduct>
-                    <img alt="alicate" src="https://picsum.photos/300/300"/>
-                
-                    <Specs>
-                        <h1>Alicate pra gatonet</h1>
-                        <p>R$ 29,90</p>
-                    
-                        <BsPlusSquareFill className='small'/>
-                        
-                    </Specs>
-                </OtherProduct>
-
-                
-                <OtherProduct>
-                    <img alt="alicate" src="https://picsum.photos/300/300"/>
-                
-                    <Specs>
-                        <h1>Alicate pra gatonet</h1>
-                        <p>R$ 29,90</p>
-                    
-                        <BsPlusSquareFill className='small'/>
-                        
-                    </Specs>
-                </OtherProduct>
-
-                
-                <OtherProduct>
-                    <img alt="alicate" src="https://picsum.photos/300/300"/>
-                
-                    <Specs>
-                        <h1>Alicate pra gatonet</h1>
-                        <p>R$ 29,90</p>
-                    
-                        <BsPlusSquareFill className='small'/>
-                        
-                    </Specs>
-                </OtherProduct>
-
-                
-                <OtherProduct>
-                    <img alt="alicate" src="https://picsum.photos/300/300"/>
-                
-                    <Specs>
-                        <h1>Alicate pra gatonet</h1>
-                        <p>R$ 29,90</p>
-                    
-                        <BsPlusSquareFill className='small'/>
-                        
-                    </Specs>
-                </OtherProduct>
-
-                
+                                <BsPlusSquareFill/>
+                            </Specs>
+                        </OtherProduct>
+                )}
             </OthersProductsContainer>
-
-            <FooterBar>
-                Footer
-            </FooterBar>
         </Container>
     );
 }
@@ -320,7 +193,10 @@ const VideoContainer = styled.div`
     height: auto !important;
     overflow: hidden;
 
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #004BD8;
+
     video {
         border-radius: 15px;
     }
@@ -328,7 +204,7 @@ const VideoContainer = styled.div`
 
 const FindProductBar = styled.div`
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 
     svg {
         position: absolute;
@@ -370,12 +246,11 @@ const NavBar = styled.div`
         cursor: pointer;
     }
 
-    .geral {
+    .${({typeFilter}) => typeFilter.toLowerCase()} {
         color: #004BD8;
         border-bottom: 3px solid #004BD8;
     }
 `;
-
 
 const HighlightsContainer = styled.div`
     height: 420px;
@@ -465,14 +340,6 @@ const Specs = styled.div`
 
         cursor: pointer;
     }
-
-    .small {
-        width: 25px;
-        height: 25px;
-
-        bottom: 10px;
-        right: 10px;
-    }
 `;
 
 const OthersProductsContainer = styled.div`
@@ -496,8 +363,8 @@ const OtherProduct = styled.div`
 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 
     img {
         max-width: 140px;
@@ -506,15 +373,29 @@ const OtherProduct = styled.div`
         background-color: white;
         overflow: hidden;
     }
-`;
 
-const FooterBar = styled.footer`
-    position: fixed;
-    bottom: 0;
-    left: 0;
+    .small {
+        height: 50%;
+        margin-top: 10px;
 
-    width: 100%;
-    height: 70px;
+        h1 {
+            display: block;
+            overflow: scroll;
+            height: 90px;
+            margin-bottom: 0px;
+        }
+        
+        p {
+            margin: 0;
+            margin-top: -8px;
+        }
 
-    background-color: lightblue;
+        svg {
+            width: 25px;
+            height: 25px;
+
+            bottom: 10px;
+            right: 10px;
+        }
+    }
 `;
