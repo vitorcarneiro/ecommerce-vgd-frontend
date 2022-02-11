@@ -7,7 +7,7 @@ import {
   Input,
   StyledLink,
 } from "../../components/FormComponents";
-import logo from "../../assets/Images/logo-meu-velho-rosto.png";
+import logo from "../../assets/images/logo-meu-velho-rosto.png";
 
 import { signUp } from "../../services/api.js";
 import { useNavigate } from "react-router";
