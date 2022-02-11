@@ -23,8 +23,10 @@ export default function Login() {
     try {
       await signIn({ email, password });
       navigate("/home");
-    } catch {
+    } catch (err) {
+      console.log("erro");
       setLoginError(true);
+      console.log(err.data);
       setInterval(() => {
         setLoginError(false);
       }, 2000);

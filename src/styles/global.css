@@ -46,7 +46,7 @@ textarea {
   font-family: "Raleway", sans-serif;
 }
 
-.root {
+#root {
   height: 100%;
   width: 100%;
   display: flex;
