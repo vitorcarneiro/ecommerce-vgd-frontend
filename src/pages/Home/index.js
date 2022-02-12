@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from 'styled-components';
 import ReactPlayer from "react-player";
-import { BsSearch, BsFillCartDashFill, BsFillCartPlusFill } from "react-icons/bs";
+import { BsSearch, BsFillCartDashFill, BsFillCartPlusFill, BsFillCartFill } from "react-icons/bs";
 
 import Header from "../../components/TopBarComponents/header.js";
 import video from "../../assets/videos/instagram-video.mp4";
@@ -312,8 +312,8 @@ const Specs = styled.div`
     }
 
     .cartAdd {
-        width: 35px;
-        height: 35px;
+        width: 25px;
+        height: 25px;
 
         color: #004BD8;
 
