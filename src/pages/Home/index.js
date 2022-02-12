@@ -1,19 +1,16 @@
 import { useState, useEffect } from "react";
 import styled from 'styled-components';
-import { useNavigate } from "react-router";
 import ReactPlayer from "react-player";
-import { BsPlusSquareFill, BsSearch } from "react-icons/bs";
+import { BsSearch, BsFillCartDashFill, BsFillCartPlusFill } from "react-icons/bs";
 
 import bigLogo from "../../assets/images/logo-meu-velho-completo.png";
 import video from "../../assets/videos/instagram-video.mp4";
 
 import { getProducts } from '../../services/api.js';
 
-
 export default function Home() {
     const [isLoading, setIsLoading] = useState(false);
     const [products, setProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [typeFilter, setTypeFilter] = useState('GERAL');
 
@@ -35,16 +32,6 @@ export default function Home() {
         });
 
     }, []);
-
-    function typeFilterProducts(product) {
-        if (typeFilter === 'GERAL') {
-            setFilteredProducts(...products);
-
-        } else {
-            setFilteredProducts(products.filter( (product) => product.type.toLowerCase() === typeFilter.toLowerCase() ))
-        }
-
-    }
 
     function searchFilterProducts(product) {
         console.log(product);
@@ -83,7 +70,11 @@ export default function Home() {
                 <ProductsHilight hasData={products.length !== 0}>
 
                     {products.length !== 0 &&
-                        products.map((product) =>
+                        products
+                        .map(product => ({ product, sort: Math.random() }))
+                        .sort((a, b) => a.sort - b.sort)
+                        .map(({ product }) => product)
+                        .map((product) =>
                             product.isHighLight === true && 
                             (
                                 <ProductContainer>
@@ -93,7 +84,12 @@ export default function Home() {
                                     <h1>{product.name}</h1>
                                     <p>{product.price.toFixed(2).replace('.', ',')}</p>
                                 
-                                    <BsPlusSquareFill/>
+                                    <BsFillCartDashFill className='cartMinus'/>
+                                    <BsFillCartPlusFill className='cartAdd'/>
+
+                                    <div className='numberInCart'>
+                                        0
+                                    </div>
                                 </Specs>
                             </ProductContainer>
                     ))}
@@ -128,11 +124,15 @@ export default function Home() {
                 </div>
             </NavBar>
 
-            <OthersProductsContainer hasData={products.length !== 0}>
+            <OthersProductsContainer>
                 
                 {products.length !== 0 &&
                     products
+                    .filter((product) => (typeFilter !== 'GERAL' ? product.type ===  typeFilter.toLowerCase() : product))
                     .filter((product) => searchFilterProducts(product))
+                    .map(product => ({ product, sort: Math.random() }))
+                    .sort((a, b) => a.sort - b.sort)
+                    .map(({ product }) => product)
                     .map((product) =>
                         <OtherProduct>
                             <img alt={product.name} src={product.img}/>
@@ -141,7 +141,12 @@ export default function Home() {
                                 <h1>{product.name}</h1>
                                 <p>{product.price.toFixed(2).replace('.', ',')}</p>
                             
-                                <BsPlusSquareFill/>
+                                <BsFillCartDashFill className='cartMinus'/>
+                                <BsFillCartPlusFill className='cartAdd'/>
+
+                                <div className='numberInCart'>
+                                    0
+                                </div>
                             </Specs>
                         </OtherProduct>
                 )}
@@ -327,22 +332,60 @@ const Specs = styled.div`
     }
     
     p {
-        margin: 10px 0 0 0;
+        margin: 15px auto 0 auto;
         font-weight: 1000;
         color: #004BD8;
     }
 
-    svg {
+    .cartAdd {
         width: 35px;
         height: 35px;
 
         color: #004BD8;
 
         position: absolute;
-        bottom: 15px;
+        bottom: 13px;
         right: 15px;
 
         cursor: pointer;
+    }
+
+    .cartMinus {
+        width: 25px;
+        height: 25px;
+
+        color: #F00;
+
+        position: absolute;
+        bottom: 13px;
+        left: 15px;
+
+        -moz-transform: scale(-1, 1);
+        -webkit-transform: scale(-1, 1);
+        -o-transform: scale(-1, 1);
+        -ms-transform: scale(-1, 1);
+        transform: scale(-1, 1);
+
+        cursor: pointer;
+    }
+
+    .numberInCart {
+        width: 40px;
+        height: 40px;
+
+        border-radius: 50%;
+            border: 1px solid #004BD8;
+            background-color: #FFF;
+            color: #004BD8;
+        font-weight: 700;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        position: absolute;
+        top: -230px;
+        right: 0;
     }
 `;
 
@@ -390,16 +433,43 @@ const OtherProduct = styled.div`
         }
         
         p {
-            margin: 0;
+            margin: auto;
             margin-top: -8px;
         }
 
         svg {
+            position: absolute;
             width: 25px;
             height: 25px;
+        }
 
+        .cartAdd {
             bottom: 10px;
-            right: 10px;
+            right: 5px;
+        }
+        
+        .cartMinus {
+            bottom: 10px;
+            left: 5px;
+        }
+
+        .numberInCart {
+            width: 30px;
+            height: 30px;
+
+            border-radius: 50%;
+            border: 1px solid #004BD8;
+            background-color: #F1F1F1;
+            color: #004BD8;
+            font-weight: 700;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: absolute;
+            top: -140px;
+            right: -5px;
         }
     }
 `;
