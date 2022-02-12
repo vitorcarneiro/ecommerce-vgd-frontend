@@ -11,6 +11,7 @@ import { getProducts } from '../../services/api.js';
 export default function Home() {
     const [isLoading, setIsLoading] = useState(false);
     const [products, setProducts] = useState([]);
+    const [highLightsProducts, setHighLightsProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [typeFilter, setTypeFilter] = useState('GERAL');
 
@@ -65,13 +66,8 @@ export default function Home() {
                 
                 <HighlightsContainer>
                     <h1>Destaques</h1>
-                    <ProductsHilight hasData={products.length !== 0}>
-
-                        {products.length !== 0 &&
-                            products
-                            .map(product => ({ product, sort: Math.random() }))
-                            .sort((a, b) => a.sort - b.sort)
-                            .map(({ product }) => product)
+                    <ProductsHilight>
+                        {products
                             .map((product) =>
                                 product.isHighLight === true && 
                                 (
