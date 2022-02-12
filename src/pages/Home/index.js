@@ -3,9 +3,8 @@ import styled from 'styled-components';
 import ReactPlayer from "react-player";
 import { BsSearch, BsFillCartDashFill, BsFillCartPlusFill } from "react-icons/bs";
 
-import bigLogo from "../../assets/images/logo-meu-velho-completo.png";
+import Header from "../../components/TopBarComponents/header.js";
 import video from "../../assets/videos/instagram-video.mp4";
-
 import { getProducts } from '../../services/api.js';
 
 export default function Home() {
@@ -47,12 +46,11 @@ export default function Home() {
     }
 
     return (
+        <>
+        
+        <Header />
         <Container>
-            <TopBar>
-                <img alt="logo" src={bigLogo} />
-            </TopBar>
-
-           <VideoContainer>
+            <VideoContainer>
                 <ReactPlayer
                     url={video}
                     playing={true}
@@ -153,33 +151,9 @@ export default function Home() {
 
             </OthersProductsContainer>
         </Container>
+        </>
     );
 }
-    const TopBar = styled.header`
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        left: 0;
-    
-        width: 100%;
-        height: 90px;
-        background-color: #FFF;
-        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
-    
-        padding: 0 15px;
-        box-sizing: border-box;
-    
-        display: flex;
-        align-items: center;
-    
-        border-bottom: 2px solid #004BD8;
-        
-        img {
-            height: 70px;
-            align-self: start;
-            margin-top: 5px;
-        }
-    `;
 
 const Container = styled.main`
     position: absolute;
