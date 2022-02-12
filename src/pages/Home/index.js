@@ -47,38 +47,94 @@ export default function Home() {
 
     return (
         <>
-        
-        <Header />
-        <Container>
-            <VideoContainer>
-                <ReactPlayer
-                    url={video}
-                    playing={true}
-                    loop={true}
-                    controls={true}
-                    muted={true}
-                    playIcon={true}
-                    width="100%"
-                    height="100%"
-                />
-            </VideoContainer>
-            
-            <HighlightsContainer>
-                <h1>Destaques</h1>
-                <ProductsHilight hasData={products.length !== 0}>
+            <Header />
+            <Container>
+                <VideoContainer>
+                    <ReactPlayer
+                        url={video}
+                        playing={true}
+                        loop={true}
+                        controls={true}
+                        muted={true}
+                        playIcon={true}
+                        width="100%"
+                        height="100%"
+                    />
+                </VideoContainer>
+                
+                <HighlightsContainer>
+                    <h1>Destaques</h1>
+                    <ProductsHilight hasData={products.length !== 0}>
 
+                        {products.length !== 0 &&
+                            products
+                            .map(product => ({ product, sort: Math.random() }))
+                            .sort((a, b) => a.sort - b.sort)
+                            .map(({ product }) => product)
+                            .map((product) =>
+                                product.isHighLight === true && 
+                                (
+                                    <ProductContainer>
+                                    <img alt={product.name} src={product.img}/>
+                            
+                                    <Specs>
+                                        <h1>{product.name}</h1>
+                                        <p>{product.price.toFixed(2).replace('.', ',')}</p>
+                                    
+                                        <BsFillCartDashFill className='cartMinus'/>
+                                        <BsFillCartPlusFill className='cartAdd'/>
+
+                                        <div className='numberInCart'>
+                                            0
+                                        </div>
+                                    </Specs>
+                                </ProductContainer>
+                        ))}
+
+                    </ProductsHilight>
+                </HighlightsContainer>
+
+                <FindProductBar>
+                    <SearchBar
+                        type='search'
+                        placeholder='O que você está procurando?'
+                        onChange={event => {setSearchTerm(event.target.value)}}
+                    />
+                    <BsSearch />
+                </FindProductBar>
+                
+                <NavBar typeFilter={typeFilter}>
+                    <div className='geral' onClick={() => setTypeFilter('GERAL')}>
+                        GERAL
+                    </div>
+                    
+                    <div className='pintura' onClick={() => setTypeFilter('PINTURA')}>
+                        PINTURA
+                    </div>
+
+                    <div className='eletrica' onClick={() => setTypeFilter('ELETRICA')}>
+                        ELÉTRICA
+                    </div>
+
+                    <div className='hidraulica' onClick={() => setTypeFilter('HIDRAULICA')}>
+                        HIDRÁULICA
+                    </div>
+                </NavBar>
+
+                <OthersProductsContainer>
+                    
                     {products.length !== 0 &&
                         products
+                        .filter((product) => (typeFilter !== 'GERAL' ? product.type ===  typeFilter.toLowerCase() : product))
+                        .filter((product) => searchFilterProducts(product))
                         .map(product => ({ product, sort: Math.random() }))
                         .sort((a, b) => a.sort - b.sort)
                         .map(({ product }) => product)
                         .map((product) =>
-                            product.isHighLight === true && 
-                            (
-                                <ProductContainer>
+                            <OtherProduct>
                                 <img alt={product.name} src={product.img}/>
-                        
-                                <Specs>
+                            
+                                <Specs className='small'>
                                     <h1>{product.name}</h1>
                                     <p>{product.price.toFixed(2).replace('.', ',')}</p>
                                 
@@ -89,68 +145,17 @@ export default function Home() {
                                         0
                                     </div>
                                 </Specs>
-                            </ProductContainer>
-                    ))}
+                            </OtherProduct>
+                    )}
 
-                </ProductsHilight>
-            </HighlightsContainer>
-
-            <FindProductBar>
-                <SearchBar
-                    type='search'
-                    placeholder='O que você está procurando?'
-                    onChange={event => {setSearchTerm(event.target.value)}}
-                />
-                <BsSearch />
-            </FindProductBar>
-            
-            <NavBar typeFilter={typeFilter}>
-                <div className='geral' onClick={() => setTypeFilter('GERAL')}>
-                    GERAL
+                </OthersProductsContainer>
+            </Container>
+            <FooterCart>
+                <BsFillCartFill/>
+                <div>
+                    0
                 </div>
-                
-                <div className='pintura' onClick={() => setTypeFilter('PINTURA')}>
-                    PINTURA
-                </div>
-
-                <div className='eletrica' onClick={() => setTypeFilter('ELETRICA')}>
-                    ELÉTRICA
-                </div>
-
-                <div className='hidraulica' onClick={() => setTypeFilter('HIDRAULICA')}>
-                    HIDRÁULICA
-                </div>
-            </NavBar>
-
-            <OthersProductsContainer>
-                
-                {products.length !== 0 &&
-                    products
-                    .filter((product) => (typeFilter !== 'GERAL' ? product.type ===  typeFilter.toLowerCase() : product))
-                    .filter((product) => searchFilterProducts(product))
-                    .map(product => ({ product, sort: Math.random() }))
-                    .sort((a, b) => a.sort - b.sort)
-                    .map(({ product }) => product)
-                    .map((product) =>
-                        <OtherProduct>
-                            <img alt={product.name} src={product.img}/>
-                        
-                            <Specs className='small'>
-                                <h1>{product.name}</h1>
-                                <p>{product.price.toFixed(2).replace('.', ',')}</p>
-                            
-                                <BsFillCartDashFill className='cartMinus'/>
-                                <BsFillCartPlusFill className='cartAdd'/>
-
-                                <div className='numberInCart'>
-                                    0
-                                </div>
-                            </Specs>
-                        </OtherProduct>
-                )}
-
-            </OthersProductsContainer>
-        </Container>
+            </FooterCart>
         </>
     );
 }
@@ -445,5 +450,35 @@ const OtherProduct = styled.div`
             top: -140px;
             right: -5px;
         }
+    }
+`;
+
+const FooterCart = styled.footer`
+    position: fixed;
+    bottom: 15px;
+    right: 25px;
+
+    svg {
+        color: #004BD8;
+        width: 50px;
+        height: 50px;
+
+        cursor: pointer;
+    }
+
+    div {
+        position: absolute;
+        top: 0;
+        right: -5px;
+        width: 20px;
+        height: 20px;
+        background-color: #004BD8;
+        border-radius: 50%;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFF;
+        font-weight: 700;
     }
 `;
