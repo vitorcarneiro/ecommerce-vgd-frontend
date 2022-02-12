@@ -24,7 +24,7 @@ const Header = styled.header`
     left: 0;
 
     width: 100%;
-    height: 90px;
+    height: 82px;
     background-color: #FFF;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
 
@@ -35,7 +35,7 @@ const Header = styled.header`
     align-items: center;
     justify-content: space-between;
 
-    border-bottom: 2px solid #004BD8;
+    border-bottom: 3px solid #004BD8;
 
     img {
         height: 70px;
