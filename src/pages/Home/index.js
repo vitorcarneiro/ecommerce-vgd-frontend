@@ -47,6 +47,7 @@ export default function Home() {
     }
 
     function searchFilterProducts(product) {
+        console.log(product);
         if (searchTerm === "") {
             return product;
 
@@ -80,6 +81,7 @@ export default function Home() {
             <HighlightsContainer>
                 <h1>Destaques</h1>
                 <ProductsHilight hasData={products.length !== 0}>
+
                     {products.length !== 0 &&
                         products.map((product) =>
                             product.isHighLight === true && 
@@ -95,6 +97,7 @@ export default function Home() {
                                 </Specs>
                             </ProductContainer>
                     ))}
+
                 </ProductsHilight>
             </HighlightsContainer>
 
@@ -104,7 +107,6 @@ export default function Home() {
                     placeholder='O que você está procurando?'
                     onChange={event => {setSearchTerm(event.target.value)}}
                 />
-
                 <BsSearch />
             </FindProductBar>
             
@@ -127,6 +129,7 @@ export default function Home() {
             </NavBar>
 
             <OthersProductsContainer hasData={products.length !== 0}>
+                
                 {products.length !== 0 &&
                     products
                     .filter((product) => searchFilterProducts(product))
@@ -142,6 +145,7 @@ export default function Home() {
                             </Specs>
                         </OtherProduct>
                 )}
+
             </OthersProductsContainer>
         </Container>
     );
