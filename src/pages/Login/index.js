@@ -6,14 +6,17 @@ import {
   StyledLink,
 } from "../../components/FormComponents";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { signIn } from "../../services/api.js";
 import logo from "../../assets/images/logo-meu-velho-rosto.png";
+import TokenContext from "../../contexts/tokenContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState(false);
+
+  const { setToken } = useContext(TokenContext);
 
   const navigate = useNavigate();
 
@@ -21,8 +24,11 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      await signIn({ email, password });
-      navigate("/home");
+      await signIn({ email, password }).then((response) => {
+        setToken(response.data.token);
+      });
+
+      navigate("/cart");
     } catch (err) {
       console.log("erro");
       setLoginError(true);

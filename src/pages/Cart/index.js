@@ -11,13 +11,39 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo-meu-velho-completo.png";
 import { IoLogIn } from "react-icons/io5";
 import cart from "./item.js";
+import { useContext, useEffect, useState } from "react";
+import TokenContext from "../../contexts/tokenContext";
+import axios from "axios";
 
 export default function Cart() {
-  console.log(cart);
+  const [userCart, setUserCart] = useState([]);
+  const { token } = useContext(TokenContext);
+
   const confirmOrder = (e) => {
     e.preventDefault();
     alert("Pedido realizado");
   };
+
+  const getCart = () => {
+    axios
+      .get("https://ecommerce-vgd-backend.herokuapp.com", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        setUserCart([...res.data]);
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
+  };
+
+  useEffect(() => {
+    getCart();
+  }, []);
+
+  console.log(userCart);
 
   return (
     <>
