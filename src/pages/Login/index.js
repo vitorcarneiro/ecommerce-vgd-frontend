@@ -28,7 +28,7 @@ export default function Login() {
         setToken(response.data.token);
       });
 
-      navigate("/cart");
+      navigate("/");
     } catch (err) {
       console.log("erro");
       setLoginError(true);

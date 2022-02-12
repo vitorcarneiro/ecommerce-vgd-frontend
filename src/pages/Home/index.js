@@ -7,9 +7,8 @@ import { BsPlusSquareFill, BsSearch } from "react-icons/bs";
 import bigLogo from "../../assets/images/logo-meu-velho-completo.png";
 import video from "../../assets/videos/instagram-video.mp4";
 
-import { getProducts } from "../../services/api.js";
+import { addToCart, getProducts } from "../../services/api.js";
 import TokenContext from "../../contexts/tokenContext";
-import axios from "axios";
 
 export default function Home() {
   const { token } = useContext(TokenContext);
@@ -61,23 +60,14 @@ export default function Home() {
 
   async function addItemToCart(e, id) {
     e.preventDefault();
-    console.log(id);
-    console.log(products);
-    console.log(token);
 
-    axios
-      .post("https://ecommerce-vgd-backend.herokuapp.com/cart", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-        alert("erro ao criar item");
+    try {
+      await addToCart(id, token).then((res) => {
+        console.log(res);
       });
+    } catch (err) {
+      console.log(err.response);
+    }
   }
 
   return (

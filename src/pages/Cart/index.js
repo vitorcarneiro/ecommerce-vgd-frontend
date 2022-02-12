@@ -10,10 +10,9 @@ import {
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo-meu-velho-completo.png";
 import { IoLogIn } from "react-icons/io5";
-import cart from "./item.js";
 import { useContext, useEffect, useState } from "react";
 import TokenContext from "../../contexts/tokenContext";
-import axios from "axios";
+import { getCart } from "../../services/api.js";
 
 export default function Cart() {
   const [userCart, setUserCart] = useState([]);
@@ -24,23 +23,16 @@ export default function Cart() {
     alert("Pedido realizado");
   };
 
-  const getCart = () => {
-    axios
-      .get("https://ecommerce-vgd-backend.herokuapp.com", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        setUserCart([...res.data]);
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
-  };
-
   useEffect(() => {
-    getCart();
+    const promise = getCart(token);
+
+    promise.then((response) => {
+      setUserCart([...response.data]);
+    });
+
+    promise.catch((error) => {
+      console.log(error);
+    });
   }, []);
 
   console.log(userCart);
@@ -67,26 +59,10 @@ export default function Cart() {
         </Header>
         <ItemsContainer>
           <Item>
-            <div>
-              <img
-                src="https://www.palaciodasferramentas.com.br/uploads/produtos/full/82131606-2017-8-12-47-30.jpg"
-                alt="item"
-              />
-              <span>2</span>
-            </div>
-            <p>Cabo Flexível com até 750V 2,5mm azul 100 metros Cobrecom</p>
-            <span>
-              <strong>R$ 29,90</strong>
-            </span>
-          </Item>
-          <Item>
-            <div>
-              <img
-                src="https://www.palaciodasferramentas.com.br/uploads/produtos/full/82131606-2017-8-12-47-30.jpg"
-                alt="item"
-              />
-              <span>2</span>
-            </div>
+            <img
+              src="https://www.palaciodasferramentas.com.br/uploads/produtos/full/82131606-2017-8-12-47-30.jpg"
+              alt="item"
+            />
             <p>Cabo Flexível com até 750V 2,5mm azul 100 metros Cobrecom</p>
             <span>
               <strong>R$ 29,90</strong>
