@@ -11,7 +11,6 @@ import { getProducts } from '../../services/api.js';
 export default function Home() {
     const [isLoading, setIsLoading] = useState(false);
     const [products, setProducts] = useState([]);
-    const [highLightsProducts, setHighLightsProducts] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [typeFilter, setTypeFilter] = useState('GERAL');
 
@@ -31,11 +30,9 @@ export default function Home() {
             `);
             setIsLoading(false);
         });
-
     }, []);
 
     function searchFilterProducts(product) {
-        console.log(product);
         if (searchTerm === "") {
             return product;
 

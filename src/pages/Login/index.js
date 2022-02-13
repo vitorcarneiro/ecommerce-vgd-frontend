@@ -8,12 +8,14 @@ import {
 import { useNavigate } from "react-router";
 import { useState } from "react";
 import { signIn } from "../../services/api.js";
+import useAuth from "../../hooks/useAuth.js";
 import logo from "../../assets/images/logo-meu-velho-rosto.png";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState(false);
+  const { storeLogin } = useAuth();
 
   const navigate = useNavigate();
 
@@ -21,8 +23,10 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      await signIn({ email, password });
-      navigate("/home");
+      const promise = await signIn({ email, password });
+      console.log(promise.data);
+      storeLogin(promise.data);
+      navigate("/");
     } catch {
       setLoginError(true);
       setInterval(() => {
