@@ -13,6 +13,7 @@ import { IoLogIn } from "react-icons/io5";
 import { useContext, useEffect, useState } from "react";
 import TokenContext from "../../contexts/tokenContext";
 import { getCart } from "../../services/api.js";
+import axios from "axios";
 
 export default function Cart() {
   const [userCart, setUserCart] = useState([]);
@@ -24,18 +25,32 @@ export default function Cart() {
   };
 
   useEffect(() => {
-    const promise = getCart(token);
+    console.log("token", token);
+    axios
+      .get("http://localhost:5000/cart", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log("worked", res);
+        setUserCart(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    //  const promise = getCart(token);
 
-    promise.then((response) => {
-      setUserCart([...response.data]);
-    });
+    //  promise.then((response) => {
+    //    setUserCart([...response.data]);
+    //  });
 
-    promise.catch((error) => {
-      console.log(error);
-    });
+    //  promise.catch((error) => {
+    //    console.log(error);
+    //  });
   }, []);
 
-  console.log(userCart);
+  console.log("cart", userCart[0].cart);
 
   return (
     <>

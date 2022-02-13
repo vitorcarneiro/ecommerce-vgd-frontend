@@ -9,6 +9,7 @@ import video from "../../assets/videos/instagram-video.mp4";
 
 import { addToCart, getProducts } from "../../services/api.js";
 import TokenContext from "../../contexts/tokenContext";
+import axios from "axios";
 
 export default function Home() {
   const { token } = useContext(TokenContext);
@@ -17,6 +18,8 @@ export default function Home() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("GERAL");
+
+  console.log(token);
 
   useEffect(() => {
     setIsLoading(true);
@@ -60,14 +63,34 @@ export default function Home() {
 
   async function addItemToCart(e, id) {
     e.preventDefault();
+    console.log("token", token);
 
-    try {
-      await addToCart(id, token).then((res) => {
-        console.log(res);
+    axios
+      .post(
+        "http://ecommerce-vgd-backend.herokuapp.com/cart",
+        {
+          id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log("worked", res);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    } catch (err) {
-      console.log(err.response);
-    }
+
+    //  try {
+    //    await addToCart(id, token).then((res) => {
+    //      console.log(res);
+    //    });
+    //  } catch (err) {
+    //    console.log(err);
+    //  }
   }
 
   return (
