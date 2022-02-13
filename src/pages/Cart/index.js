@@ -29,7 +29,7 @@ export default function Cart() {
   useEffect(() => {
     if (auth !== null) {
       axios
-        .get("http://localhost:5000/cart", {
+        .get("http://ecommerce-vgd-backend.herokuapp.com/cart", {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
