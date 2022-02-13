@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import ReactPlayer from "react-player";
 import { BsSearch, BsFillCartDashFill, BsFillCartPlusFill, BsFillCartFill } from "react-icons/bs";
 
-import Header from "../../components/TopBarComponents/header.js";
+import Header from "../../components/HeaderComponents/header.js";
 import Footer from "../../components/FooterComponents/footer.js";
 import video from "../../assets/videos/instagram-video.mp4";
 import { getProducts } from '../../services/api.js';
@@ -273,7 +273,7 @@ const ProductContainer = styled.div`
     img {
         width: 220px;
         object-fit: contain;
-        background-color: white;
+        background-color: #FFF;
         overflow: hidden;
     }
 `;
@@ -385,7 +385,7 @@ const OtherProduct = styled.div`
         max-width: 140px;
         border-radius: 5px;
         object-fit: contain;
-        background-color: white;
+        background-color: #FFF;
         overflow: hidden;
     }
 
