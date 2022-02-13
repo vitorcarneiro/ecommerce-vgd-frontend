@@ -10,14 +10,16 @@ import {
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo-meu-velho-completo.png";
 import { IoLogIn } from "react-icons/io5";
-import { useContext, useEffect, useState } from "react";
-import TokenContext from "../../contexts/tokenContext";
+import { useEffect, useState } from "react";
 import { getCart } from "../../services/api.js";
 import axios from "axios";
+import useAuth from "../../hooks/useAuth";
 
 export default function Cart() {
   const [userCart, setUserCart] = useState([]);
-  const { token } = useContext(TokenContext);
+  const [total, setTotal] = useState(0);
+  const [items, setItems] = useState(0);
+  const { auth } = useAuth();
 
   const confirmOrder = (e) => {
     e.preventDefault();
@@ -25,24 +27,25 @@ export default function Cart() {
   };
 
   useEffect(() => {
-    console.log("token", token);
-    axios
-      .get("http://localhost:5000/cart", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        console.log("worked", res);
-        setUserCart(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (auth !== null) {
+      axios
+        .get("http://localhost:5000/cart", {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        })
+        .then((res) => {
+          setUserCart(res.data);
+          getTotal(res.data[0].cart);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
     //  const promise = getCart(token);
 
     //  promise.then((response) => {
-    //    setUserCart([...response.data]);
+    //    setUserCart(response.data);
     //  });
 
     //  promise.catch((error) => {
@@ -50,7 +53,14 @@ export default function Cart() {
     //  });
   }, []);
 
-  console.log("cart", userCart[0].cart);
+  function getTotal(items) {
+    let sum = 0;
+    for (let i = 0; i < items.length; i++) {
+      sum += items[i].price;
+    }
+    setItems(items.length);
+    setTotal(parseFloat(sum).toFixed(2));
+  }
 
   return (
     <>
@@ -66,30 +76,34 @@ export default function Cart() {
           </div>
           <div>
             <h1>Carrinho</h1>
-            <p>40 itens</p>
+            <p>{items} itens</p>
             <Subtotal>
-              <strong>$2500.00</strong>
+              <strong>R${total}</strong>
             </Subtotal>
           </div>
         </Header>
-        <ItemsContainer>
-          <Item>
-            <img
-              src="https://www.palaciodasferramentas.com.br/uploads/produtos/full/82131606-2017-8-12-47-30.jpg"
-              alt="item"
-            />
-            <p>Cabo Flexível com até 750V 2,5mm azul 100 metros Cobrecom</p>
-            <span>
-              <strong>R$ 29,90</strong>
-            </span>
-          </Item>
-        </ItemsContainer>
+        {userCart.length === 0 ? (
+          <h1>Adicione produtos ao carrinho</h1>
+        ) : (
+          <ItemsContainer>
+            {userCart[0].cart.map((cartItem) => (
+              <Item key={cartItem._id}>
+                <img src={cartItem.img} alt="item" />
+                <p>{cartItem.name}</p>
+                <span>
+                  <strong>R${cartItem.price}</strong>
+                </span>
+              </Item>
+            ))}
+          </ItemsContainer>
+        )}
+
         <Footer>
           <hr />
           <div>
             <p>Subtotal</p>
             <p>
-              <strong>300</strong>
+              <strong>{total}</strong>
             </p>
           </div>
           <div>
@@ -103,7 +117,7 @@ export default function Cart() {
             <p>
               <strong>Total</strong>
             </p>
-            <span>R$ 500,00</span>
+            <span>R$ {total}</span>
           </div>
         </Footer>
         <Button onClick={confirmOrder}>Fazer pedido</Button>
