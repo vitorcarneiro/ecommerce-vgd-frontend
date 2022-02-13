@@ -8,15 +8,14 @@ import {
 import { useNavigate } from "react-router";
 import { useContext, useState } from "react";
 import { signIn } from "../../services/api.js";
+import useAuth from "../../hooks/useAuth.js";
 import logo from "../../assets/images/logo-meu-velho-rosto.png";
-import TokenContext from "../../contexts/tokenContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState(false);
-
-  const { setToken } = useContext(TokenContext);
+  const { storeLogin } = useAuth();
 
   const navigate = useNavigate();
 
@@ -24,18 +23,17 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      await signIn({ email, password }).then((response) => {
-        setToken(response.data.token);
-      });
+      const promise = await signIn({ email, password });
+      storeLogin(promise.data);
+      navigate("/");
 
-      navigate("/cart");
-    } catch (err) {
-      console.log("erro");
+    } catch(err) {
       setLoginError(true);
       console.log(err.data);
       setInterval(() => {
         setLoginError(false);
       }, 2000);
+
     }
   }
   return (

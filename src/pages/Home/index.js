@@ -1,190 +1,195 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled from 'styled-components';
 import ReactPlayer from "react-player";
-import {
-  BsSearch,
-  BsFillCartDashFill,
-  BsFillCartPlusFill,
-  BsFillCartFill,
-} from "react-icons/bs";
+import { BsSearch, BsFillCartDashFill, BsFillCartPlusFill } from "react-icons/bs";
+import { TailSpin } from  'react-loader-spinner'
+import axios from "axios";
 
-import Header from "../../components/TopBarComponents/header.js";
+import Header from "../../components/HeaderComponents/header.js";
 import Footer from "../../components/FooterComponents/footer.js";
 import video from "../../assets/videos/instagram-video.mp4";
-import { getProducts } from "../../services/api.js";
-import axios from "axios";
+import { getProducts } from '../../services/api.js';
 import useAuth from "../../hooks/useAuth.js";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [typeFilter, setTypeFilter] = useState("GERAL");
-  const { auth } = useAuth();
+    const [isLoading, setIsLoading] = useState(false);
+    const [products, setProducts] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [typeFilter, setTypeFilter] = useState('GERAL');
+    const { auth, storeLogin } = useAuth();
 
-  useEffect(() => {
-    setIsLoading(true);
-    const promise = getProducts();
+    useEffect(() => {
+        setIsLoading(true);
+        const promise = getProducts();
 
-    promise.then((response) => {
-      setIsLoading(false);
-      setProducts([...response.data]);
-    });
+        promise.then((response) => {
+            setIsLoading(false);
+            setProducts([...response.data]);
+        });
 
-    promise.catch((error) => {
-      alert(`STATUS: ${error.response.statusText} (${error.response.status})
+        promise.catch((error) => {
+            alert(`STATUS: ${error.response.statusText} (${error.response.status})
             
             ${error.response.data}
             `);
-      setIsLoading(false);
-    });
-  }, []);
+            setIsLoading(false);
+        });
+    }, []);
 
-  function searchFilterProducts(product) {
-    if (searchTerm === "") {
-      return product;
-    } else if (product.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-      return product;
+    function searchFilterProducts(product) {
+        if (searchTerm === "") {
+            return product;
+
+        } else if (product.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+            return product;
+
+        }
+
+        return 0;
     }
 
-    return 0;
-  }
-
-  async function addItemToCart(e, id) {
-    e.preventDefault();
-    console.log("token", auth.token);
-
-    axios
-      .post(
-        "http://ecommerce-vgd-backend.herokuapp.com/cart",
-        {
-          id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
+    async function addItemToCart(e, id) {
+      e.preventDefault();
+      console.log("token", auth.token);
+  
+      axios
+        .post(
+          "http://ecommerce-vgd-backend.herokuapp.com/cart",
+          {
+            id,
           },
-        }
-      )
-      .then((res) => {
-        console.log("Item adicionado ao carrinho", res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+          {
+            headers: {
+              Authorization: `Bearer ${auth.token}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log("Item adicionado ao carrinho", res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
 
-  return (
-    <>
-      <Header />
-      <Container>
-        <VideoContainer>
-          <ReactPlayer
-            url={video}
-            playing={true}
-            loop={true}
-            controls={true}
-            muted={true}
-            playIcon={true}
-            width="100%"
-            height="100%"
-          />
-        </VideoContainer>
+    return (
+        <>
+            {isLoading ?
+                <Loading>
+                    <p>Loading...</p>
+                    <TailSpin color="#00BFFF" height={80} width={80} />
+                </Loading>
+                :
+                <>
+                    <Header />
+                    <Container>
+                        <VideoContainer>
+                            <ReactPlayer
+                                url={video}
+                                playing={true}
+                                loop={true}
+                                controls={true}
+                                muted={true}
+                                playIcon={true}
+                                width="100%"
+                                height="100%"
+                            />
+                        </VideoContainer>
+                        
+                        <HighlightsContainer>
+                            <h1>Destaques</h1>
+                            <ProductsHilight>
+                                {products
+                                    .map((product) =>
+                                        product.isHighLight === true && 
+                                        (
+                                            <ProductContainer>
+                                            <img alt={product.name} src={product.img}/>
+                                    
+                                            <Specs>
+                                                <h1>{product.name}</h1>
+                                                <p>{product.price.toFixed(2).replace('.', ',')}</p>
+                                            
+                                                <BsFillCartDashFill className='cartMinus'/>
+                                                <BsFillCartPlusFill
+                                                  className='cartAdd'
+                                                  onClick={(e) => addItemToCart(e, product._id)}
+                                                />
 
-        <HighlightsContainer>
-          <h1>Destaques</h1>
-          <ProductsHilight>
-            {products.map(
-              (product) =>
-                product.isHighLight === true && (
-                  <ProductContainer>
-                    <img alt={product.name} src={product.img} />
+                                                <div className='numberInCart'>
+                                                    0
+                                                </div>
+                                            </Specs>
+                                        </ProductContainer>
+                                ))}
 
-                    <Specs>
-                      <h1>{product.name}</h1>
-                      <p>{product.price.toFixed(2).replace(".", ",")}</p>
+                            </ProductsHilight>
+                        </HighlightsContainer>
 
-                      <BsFillCartDashFill className="cartMinus" />
-                      <BsFillCartPlusFill
-                        className="cartAdd"
-                        onClick={(e) => addItemToCart(e, product._id)}
-                      />
+                        <FindProductBar>
+                            <SearchBar
+                                type='search'
+                                placeholder='O que você está procurando?'
+                                onChange={event => {setSearchTerm(event.target.value)}}
+                            />
+                            <BsSearch />
+                        </FindProductBar>
+                        
+                        <NavBar typeFilter={typeFilter}>
+                            <div className='geral' onClick={() => setTypeFilter('GERAL')}>
+                                GERAL
+                            </div>
+                            
+                            <div className='pintura' onClick={() => setTypeFilter('PINTURA')}>
+                                PINTURA
+                            </div>
 
-                      <div className="numberInCart">0</div>
-                    </Specs>
-                  </ProductContainer>
-                )
-            )}
-          </ProductsHilight>
-        </HighlightsContainer>
+                            <div className='eletrica' onClick={() => setTypeFilter('ELETRICA')}>
+                                ELÉTRICA
+                            </div>
 
-        <FindProductBar>
-          <SearchBar
-            type="search"
-            placeholder="O que você está procurando?"
-            onChange={(event) => {
-              setSearchTerm(event.target.value);
-            }}
-          />
-          <BsSearch />
-        </FindProductBar>
+                            <div className='hidraulica' onClick={() => setTypeFilter('HIDRAULICA')}>
+                                HIDRÁULICA
+                            </div>
+                        </NavBar>
 
-        <NavBar typeFilter={typeFilter}>
-          <div className="geral" onClick={() => setTypeFilter("GERAL")}>
-            GERAL
-          </div>
+                        <OthersProductsContainer>
+                            
+                            {products.length !== 0 &&
+                                products
+                                .filter((product) => (typeFilter !== 'GERAL' ? product.type ===  typeFilter.toLowerCase() : product))
+                                .filter((product) => searchFilterProducts(product))
+                                .map(product => ({ product, sort: Math.random() }))
+                                .sort((a, b) => a.sort - b.sort)
+                                .map(({ product }) => product)
+                                .map((product) =>
+                                    <OtherProduct>
+                                        <img alt={product.name} src={product.img}/>
+                                    
+                                        <Specs className='small'>
+                                            <h1>{product.name}</h1>
+                                            <p>{product.price.toFixed(2).replace('.', ',')}</p>
+                                        
+                                            <BsFillCartDashFill className='cartMinus'/>
+                                            <BsFillCartPlusFill
+                                              className='cartAdd'
+                                              onClick={(e) => addItemToCart(e, product._id)}
+                                            />
 
-          <div className="pintura" onClick={() => setTypeFilter("PINTURA")}>
-            PINTURA
-          </div>
+                                            <div className='numberInCart'>
+                                                0
+                                            </div>
+                                        </Specs>
+                                    </OtherProduct>
+                            )}
 
-          <div className="eletrica" onClick={() => setTypeFilter("ELETRICA")}>
-            ELÉTRICA
-          </div>
-
-          <div
-            className="hidraulica"
-            onClick={() => setTypeFilter("HIDRAULICA")}
-          >
-            HIDRÁULICA
-          </div>
-        </NavBar>
-
-        <OthersProductsContainer>
-          {products.length !== 0 &&
-            products
-              .filter((product) =>
-                typeFilter !== "GERAL"
-                  ? product.type === typeFilter.toLowerCase()
-                  : product
-              )
-              .filter((product) => searchFilterProducts(product))
-              .map((product) => ({ product, sort: Math.random() }))
-              .sort((a, b) => a.sort - b.sort)
-              .map(({ product }) => product)
-              .map((product) => (
-                <OtherProduct>
-                  <img alt={product.name} src={product.img} />
-
-                  <Specs className="small">
-                    <h1>{product.name}</h1>
-                    <p>{product.price.toFixed(2).replace(".", ",")}</p>
-
-                    <BsFillCartDashFill className="cartMinus" />
-                    <BsFillCartPlusFill
-                      className="cartAdd"
-                      onClick={(e) => addItemToCart(e, product._id)}
-                    />
-
-                    <div className="numberInCart">0</div>
-                  </Specs>
-                </OtherProduct>
-              ))}
-        </OthersProductsContainer>
-      </Container>
-      <Footer />
-    </>
-  );
+                        </OthersProductsContainer>
+                    </Container>
+                    <Footer/>
+                </>
+            }
+        </>
+    );
 }
 
 const Container = styled.main`
@@ -201,6 +206,19 @@ const Container = styled.main`
   background-color: #fff;
 
   font-family: "Montserrat", sans-serif;
+`;
+
+const Loading = styled.div`
+    margin-top: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    font-weight: 700;
+    font-size: 20px;
+    color: #00BFFF;
 `;
 
 const VideoContainer = styled.div`
@@ -352,47 +370,45 @@ const Specs = styled.div`
     position: absolute;
     bottom: 13px;
     right: 15px;
-
-    cursor: pointer;
   }
 
   .cartMinus {
-    width: 25px;
-    height: 25px;
+      width: 25px;
+      height: 25px;
 
-    color: #f00;
+      color: #F00;
 
-    position: absolute;
-    bottom: 13px;
-    left: 15px;
+      position: absolute;
+      bottom: 13px;
+      left: 15px;
 
-    -moz-transform: scale(-1, 1);
-    -webkit-transform: scale(-1, 1);
-    -o-transform: scale(-1, 1);
-    -ms-transform: scale(-1, 1);
-    transform: scale(-1, 1);
+      -moz-transform: scale(-1, 1);
+      -webkit-transform: scale(-1, 1);
+      -o-transform: scale(-1, 1);
+      -ms-transform: scale(-1, 1);
+      transform: scale(-1, 1);
 
-    cursor: pointer;
-  }
+      cursor: pointer;
+    }
 
-  .numberInCart {
-    width: 40px;
-    height: 40px;
+    .numberInCart {
+      width: 40px;
+      height: 40px;
 
-    border-radius: 50%;
-    border: 1px solid #004bd8;
-    background-color: #fff;
-    color: #004bd8;
-    font-weight: 700;
+      border-radius: 50%;
+      border: 1px solid #004BD8;
+      background-color: #FFF;
+      color: #004BD8;
+      font-weight: 700;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    position: absolute;
-    top: -230px;
-    right: 0;
-  }
+      position: absolute;
+      top: -230px;
+      right: 0;
+    }
 `;
 
 const OthersProductsContainer = styled.div`
@@ -431,51 +447,51 @@ const OtherProduct = styled.div`
     height: 50%;
     margin-top: 10px;
 
-    h1 {
-      display: block;
-      overflow: scroll;
-      height: 90px;
-      margin-bottom: 0px;
-    }
+  h1 {
+    display: block;
+    overflow: scroll;
+    height: 90px;
+    margin-bottom: 0px;
+  }
 
-    p {
-      margin: auto;
-      margin-top: -8px;
-    }
+  p {
+    margin: auto;
+    margin-top: -8px;
+  }
 
-    svg {
-      position: absolute;
-      width: 25px;
-      height: 25px;
-    }
+  svg {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+  }
 
-    .cartAdd {
-      bottom: 10px;
-      right: 5px;
-    }
+  .cartAdd {
+    bottom: 10px;
+    right: 5px;
+  }
 
-    .cartMinus {
-      bottom: 10px;
-      left: 5px;
-    }
+  .cartMinus {
+    bottom: 10px;
+    left: 5px;
+  }
 
-    .numberInCart {
-      width: 30px;
-      height: 30px;
+  .numberInCart {
+    width: 30px;
+    height: 30px;
 
-      border-radius: 50%;
-      border: 1px solid #004bd8;
-      background-color: #f1f1f1;
-      color: #004bd8;
-      font-weight: 700;
+    border-radius: 50%;
+    border: 1px solid #004bd8;
+    background-color: #f1f1f1;
+    color: #004bd8;
+    font-weight: 700;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-      position: absolute;
-      top: -140px;
-      right: -5px;
+    position: absolute;
+    top: -140px;
+    right: -5px;
     }
   }
 `;
