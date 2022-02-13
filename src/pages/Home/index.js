@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import styled from 'styled-components';
 import ReactPlayer from "react-player";
-import { BsSearch, BsFillCartDashFill, BsFillCartPlusFill, BsFillCartFill } from "react-icons/bs";
+import { BsSearch, BsFillCartDashFill, BsFillCartPlusFill } from "react-icons/bs";
+import { TailSpin } from  'react-loader-spinner'
 
 import Header from "../../components/HeaderComponents/header.js";
 import Footer from "../../components/FooterComponents/footer.js";
@@ -46,105 +47,114 @@ export default function Home() {
 
     return (
         <>
-            <Header />
-            <Container>
-                <VideoContainer>
-                    <ReactPlayer
-                        url={video}
-                        playing={true}
-                        loop={true}
-                        controls={true}
-                        muted={true}
-                        playIcon={true}
-                        width="100%"
-                        height="100%"
-                    />
-                </VideoContainer>
-                
-                <HighlightsContainer>
-                    <h1>Destaques</h1>
-                    <ProductsHilight>
-                        {products
-                            .map((product) =>
-                                product.isHighLight === true && 
-                                (
-                                    <ProductContainer>
-                                    <img alt={product.name} src={product.img}/>
-                            
-                                    <Specs>
-                                        <h1>{product.name}</h1>
-                                        <p>{product.price.toFixed(2).replace('.', ',')}</p>
+            {isLoading ?
+                <Loading>
+                    <p>Loading...</p>
+                    <TailSpin color="#00BFFF" height={80} width={80} />
+                </Loading>
+                :
+                <>
+                    <Header />
+                    <Container>
+                        <VideoContainer>
+                            <ReactPlayer
+                                url={video}
+                                playing={true}
+                                loop={true}
+                                controls={true}
+                                muted={true}
+                                playIcon={true}
+                                width="100%"
+                                height="100%"
+                            />
+                        </VideoContainer>
+                        
+                        <HighlightsContainer>
+                            <h1>Destaques</h1>
+                            <ProductsHilight>
+                                {products
+                                    .map((product) =>
+                                        product.isHighLight === true && 
+                                        (
+                                            <ProductContainer>
+                                            <img alt={product.name} src={product.img}/>
                                     
-                                        <BsFillCartDashFill className='cartMinus'/>
-                                        <BsFillCartPlusFill className='cartAdd'/>
+                                            <Specs>
+                                                <h1>{product.name}</h1>
+                                                <p>{product.price.toFixed(2).replace('.', ',')}</p>
+                                            
+                                                <BsFillCartDashFill className='cartMinus'/>
+                                                <BsFillCartPlusFill className='cartAdd'/>
 
-                                        <div className='numberInCart'>
-                                            0
-                                        </div>
-                                    </Specs>
-                                </ProductContainer>
-                        ))}
+                                                <div className='numberInCart'>
+                                                    0
+                                                </div>
+                                            </Specs>
+                                        </ProductContainer>
+                                ))}
 
-                    </ProductsHilight>
-                </HighlightsContainer>
+                            </ProductsHilight>
+                        </HighlightsContainer>
 
-                <FindProductBar>
-                    <SearchBar
-                        type='search'
-                        placeholder='O que você está procurando?'
-                        onChange={event => {setSearchTerm(event.target.value)}}
-                    />
-                    <BsSearch />
-                </FindProductBar>
-                
-                <NavBar typeFilter={typeFilter}>
-                    <div className='geral' onClick={() => setTypeFilter('GERAL')}>
-                        GERAL
-                    </div>
-                    
-                    <div className='pintura' onClick={() => setTypeFilter('PINTURA')}>
-                        PINTURA
-                    </div>
-
-                    <div className='eletrica' onClick={() => setTypeFilter('ELETRICA')}>
-                        ELÉTRICA
-                    </div>
-
-                    <div className='hidraulica' onClick={() => setTypeFilter('HIDRAULICA')}>
-                        HIDRÁULICA
-                    </div>
-                </NavBar>
-
-                <OthersProductsContainer>
-                    
-                    {products.length !== 0 &&
-                        products
-                        .filter((product) => (typeFilter !== 'GERAL' ? product.type ===  typeFilter.toLowerCase() : product))
-                        .filter((product) => searchFilterProducts(product))
-                        .map(product => ({ product, sort: Math.random() }))
-                        .sort((a, b) => a.sort - b.sort)
-                        .map(({ product }) => product)
-                        .map((product) =>
-                            <OtherProduct>
-                                <img alt={product.name} src={product.img}/>
+                        <FindProductBar>
+                            <SearchBar
+                                type='search'
+                                placeholder='O que você está procurando?'
+                                onChange={event => {setSearchTerm(event.target.value)}}
+                            />
+                            <BsSearch />
+                        </FindProductBar>
+                        
+                        <NavBar typeFilter={typeFilter}>
+                            <div className='geral' onClick={() => setTypeFilter('GERAL')}>
+                                GERAL
+                            </div>
                             
-                                <Specs className='small'>
-                                    <h1>{product.name}</h1>
-                                    <p>{product.price.toFixed(2).replace('.', ',')}</p>
-                                
-                                    <BsFillCartDashFill className='cartMinus'/>
-                                    <BsFillCartPlusFill className='cartAdd'/>
+                            <div className='pintura' onClick={() => setTypeFilter('PINTURA')}>
+                                PINTURA
+                            </div>
 
-                                    <div className='numberInCart'>
-                                        0
-                                    </div>
-                                </Specs>
-                            </OtherProduct>
-                    )}
+                            <div className='eletrica' onClick={() => setTypeFilter('ELETRICA')}>
+                                ELÉTRICA
+                            </div>
 
-                </OthersProductsContainer>
-            </Container>
-            <Footer/>
+                            <div className='hidraulica' onClick={() => setTypeFilter('HIDRAULICA')}>
+                                HIDRÁULICA
+                            </div>
+                        </NavBar>
+
+                        <OthersProductsContainer>
+                            
+                            {products.length !== 0 &&
+                                products
+                                .filter((product) => (typeFilter !== 'GERAL' ? product.type ===  typeFilter.toLowerCase() : product))
+                                .filter((product) => searchFilterProducts(product))
+                                .map(product => ({ product, sort: Math.random() }))
+                                .sort((a, b) => a.sort - b.sort)
+                                .map(({ product }) => product)
+                                .map((product) =>
+                                    <OtherProduct>
+                                        <img alt={product.name} src={product.img}/>
+                                    
+                                        <Specs className='small'>
+                                            <h1>{product.name}</h1>
+                                            <p>{product.price.toFixed(2).replace('.', ',')}</p>
+                                        
+                                            <BsFillCartDashFill className='cartMinus'/>
+                                            <BsFillCartPlusFill className='cartAdd'/>
+
+                                            <div className='numberInCart'>
+                                                0
+                                            </div>
+                                        </Specs>
+                                    </OtherProduct>
+                            )}
+
+                        </OthersProductsContainer>
+                    </Container>
+                    <Footer/>
+                </>
+            }
         </>
     );
 }
@@ -163,6 +173,19 @@ const Container = styled.main`
     background-color: #FFF;
     
     font-family: 'Montserrat', sans-serif;
+`;
+
+const Loading = styled.div`
+    margin-top: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    font-weight: 700;
+    font-size: 20px;
+    color: #00BFFF;
 `;
 
 const VideoContainer = styled.div`
