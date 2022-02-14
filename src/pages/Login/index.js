@@ -6,7 +6,7 @@ import {
   StyledLink,
 } from "../../components/FormComponents";
 import { useNavigate } from "react-router";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { signIn } from "../../services/api.js";
 import useAuth from "../../hooks/useAuth.js";
 import logo from "../../assets/images/logo-meu-velho-rosto.png";
@@ -26,14 +26,12 @@ export default function Login() {
       const promise = await signIn({ email, password });
       storeLogin(promise.data);
       navigate("/");
-
-    } catch(err) {
+    } catch (err) {
       setLoginError(true);
       console.log(err.data);
       setInterval(() => {
         setLoginError(false);
       }, 2000);
-
     }
   }
   return (
