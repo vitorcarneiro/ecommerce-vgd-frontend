@@ -35,4 +35,17 @@ function getCart(token) {
   });
 }
 
-export { signIn, signUp, getProducts, addToCart, getCart };
+function postItemToCart(token, id) {
+  return axios.post(`${BASE_URL}/cart`,
+    {
+      id,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+}
+
+export { signIn, signUp, getProducts, addToCart, getCart, postItemToCart };

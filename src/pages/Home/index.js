@@ -9,7 +9,7 @@ import axios from "axios";
 import Header from "../../components/HeaderComponents/header.js";
 import Footer from "../../components/FooterComponents/footer.js";
 import video from "../../assets/videos/instagram-video.mp4";
-import { getProducts } from '../../services/api.js';
+import { getProducts, postItemToCart } from '../../services/api.js';
 import useAuth from "../../hooks/useAuth.js";
 
 export default function Home() {
@@ -57,22 +57,11 @@ export default function Home() {
         navigate("/login");
       }
   
-      axios
-        .post(
-          "http://ecommerce-vgd-backend.herokuapp.com/cart",
-          {
-            id,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${auth.token}`,
-            },
-          }
-        )
-        .then((res) => {
+      const promise = await postItemToCart(auth.token, id);
+        promise.then((res) => {
           console.log("Item adicionado ao carrinho", res);
         })
-        .catch((err) => {
+        promise.catch((err) => {
           console.log(err);
         });
     }
