@@ -8,11 +8,10 @@ import {
   Button,
   EmptyCart,
 } from "../../components/CartComponents";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo-meu-velho-completo.png";
 import { IoLogIn } from "react-icons/io5";
 import { useEffect, useState } from "react";
-import { getCart } from "../../services/api.js";
 import axios from "axios";
 import useAuth from "../../hooks/useAuth";
 
@@ -22,11 +21,11 @@ export default function Cart() {
   const [items, setItems] = useState(0);
   const { auth } = useAuth();
 
-  const confirmOrder = (e) => {
-    e.preventDefault();
-    alert("Pedido realizado");
-  };
+  const navigate = useNavigate();
 
+  function checkout(e) {
+    navigate("/checkout");
+  }
   useEffect(() => {
     if (auth !== null) {
       axios
@@ -122,7 +121,7 @@ export default function Cart() {
                 <span>R$ {total}</span>
               </div>
             </Footer>
-            <Button onClick={confirmOrder}>Checkout</Button>
+            <Button onClick={() => checkout()}>Checkout</Button>
           </>
         )}
       </Container>

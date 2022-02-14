@@ -1,14 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Container,
   Form,
   Input,
 } from "../../components/FormComponents";
-import logo from "../../assets/images/logo-meu-velho-rosto.png";
+import useAuth from "../../hooks/useAuth.js";
+import axios from "axios";
+import { useNavigate } from "react-router";
 
 export default function Checkout() {
-  const [formData, setFormData] = useState({
+  const { auth } = useAuth();
+  const navigate = useNavigate();
+
+  const [addressData, setAddressData] = useState({
     rua: "",
     cep: "",
     numero: "",
@@ -18,22 +23,56 @@ export default function Checkout() {
     estado: "",
   });
 
-  function handleChange(e) {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    if (!auth) {
+      navigate("/cart");
+    }
+  });
+
+  console.log(addressData);
+
+  async function checkout(e) {
+    e.preventDefault();
+
+    axios
+      .post(
+        "http://ecommerce-vgd-backend.herokuapp.com/checkout",
+        {
+          addressData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${auth.token}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log("Endereco registrado!", res);
+        alert("Obrigado por comprar conosco! Volte Sempre! ");
+        navigate("/");
+      })
+      .catch((err) => {
+        alert("Erro! Faça login novamente!");
+        navigate("/cart");
+      });
   }
 
-  console.log(formData);
+  function handleChange(e) {
+    setAddressData({ ...addressData, [e.target.name]: e.target.value });
+  }
+
+  console.log(addressData);
 
   return (
     <>
       <Container>
         <h2>Endereço de entrega</h2>
-        <Form>
+        <Form onSubmit={checkout}>
           <Input
             type="text"
             name="rua"
             placeholder="Rua"
-            value={formData.rua}
+            value={addressData.rua}
             onChange={handleChange}
             required
           />
@@ -41,7 +80,7 @@ export default function Checkout() {
             type="number"
             name="numero"
             placeholder="Número"
-            value={formData.numero}
+            value={addressData.numero}
             onChange={handleChange}
             required
           />
@@ -49,7 +88,7 @@ export default function Checkout() {
             type="text"
             name="complemento"
             placeholder="Complemento"
-            value={formData.complemento}
+            value={addressData.complemento}
             onChange={handleChange}
             required
           />
@@ -57,7 +96,7 @@ export default function Checkout() {
             type="text"
             name="bairro"
             placeholder="Bairro"
-            value={formData.bairro}
+            value={addressData.bairro}
             onChange={handleChange}
             required
           />
@@ -65,7 +104,7 @@ export default function Checkout() {
             type="text"
             name="cidade"
             placeholder="Cidade"
-            value={formData.cidade}
+            value={addressData.cidade}
             onChange={handleChange}
             required
           />
@@ -73,15 +112,15 @@ export default function Checkout() {
             type="text"
             name="estado"
             placeholder="Estado"
-            value={formData.estado}
+            value={addressData.estado}
             onChange={handleChange}
             required
           />
           <Input
-            type="number"
+            type="text"
             name="cep"
             placeholder="CEP"
-            value={formData.cep}
+            value={addressData.cep}
             onChange={handleChange}
             required
           />
