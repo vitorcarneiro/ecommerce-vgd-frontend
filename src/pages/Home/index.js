@@ -8,11 +8,12 @@ import {
   BsFillCartPlusFill,
 } from "react-icons/bs";
 import { TailSpin } from "react-loader-spinner";
+import { Link } from "react-router-dom";
+import { BsFillCartFill } from "react-icons/bs";
 
 import Header from "../../components/HeaderComponents/header.js";
-import Footer from "../../components/FooterComponents/footer.js";
 import video from "../../assets/videos/instagram-video.mp4";
-import { addToCart, getProducts } from "../../services/api.js";
+import { addToCart, getProducts, getCart } from "../../services/api.js";
 import useAuth from "../../hooks/useAuth.js";
 
 export default function Home() {
@@ -20,6 +21,8 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("GERAL");
+  const [qtyItems, setQtylItems] = useState(0);
+  const [changeCart, setChangeCart] = useState(0);
   const { auth } = useAuth();
 
   useEffect(() => {
@@ -40,6 +43,28 @@ export default function Home() {
     });
   }, []);
 
+  useEffect(() => {
+    if (auth !== null) {
+      const promise = getCart(auth.token);
+
+      promise.then((response) => {
+        getQtyItems(response.data[0].cart);
+      });
+
+      promise.catch((error) => {
+        console.log(error);
+      });
+    }
+  }, [changeCart]);
+
+  function getQtyItems(items) {
+    let sum = 0;
+    for (let i = 0; i < items.length; i++) {
+      sum += items[i].cartQTY;
+    }
+    setQtylItems(sum);
+  }
+
   function searchFilterProducts(product) {
     if (searchTerm === "") {
       return product;
@@ -55,6 +80,7 @@ export default function Home() {
     if (auth) {
       const promise = addToCart({ id }, auth.token);
       promise.then((res) => {
+        setChangeCart(changeCart + 1);
         console.log("Item adicionado ao carrinho", res);
       });
       promise.catch((err) => {
@@ -161,9 +187,6 @@ export default function Home() {
                       : product
                   )
                   .filter((product) => searchFilterProducts(product))
-                  .map((product) => ({ product, sort: Math.random() }))
-                  .sort((a, b) => a.sort - b.sort)
-                  .map(({ product }) => product)
                   .map((product) => (
                     <OtherProduct>
                       <img alt={product.name} src={product.img} />
@@ -184,7 +207,16 @@ export default function Home() {
                   ))}
             </OthersProductsContainer>
           </Container>
-          <Footer />
+          
+          <Footer>
+            <Link to="/cart">
+                <BsFillCartFill/>
+                <div>
+                    {qtyItems}
+                </div>
+            </Link>
+          </Footer>
+
         </>
       )}
     </>
@@ -494,3 +526,33 @@ const OtherProduct = styled.div`
     }
   }
 `;
+
+const Footer = styled.footer`
+  position: fixed;
+  bottom: 15px;
+  right: 25px;
+
+  svg {
+    color: #3bb273;
+    width: 50px;
+    height: 50px;
+
+    cursor: pointer;
+  }
+
+  div {
+    position: absolute;
+    top: 0;
+    right: -5px;
+    width: 25px;
+    height: 25px;
+    background-color: #3bb273;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+  }
+`;
+

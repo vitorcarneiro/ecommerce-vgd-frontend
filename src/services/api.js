@@ -1,7 +1,7 @@
 import axios from "axios";
 
-//const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-const BASE_URL = "http://ecommerce-vgd-backend.herokuapp.com";
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+//const BASE_URL = "http://ecommerce-vgd-backend.herokuapp.com";
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -24,6 +24,11 @@ function addToCart(body, token) {
   return axios.post(`${BASE_URL}/cart`, body, config);
 }
 
+function removeFromCart(body, token) {
+  const config = createConfig(token);
+  return axios.post(`${BASE_URL}/deleteItem`, body, config);
+}
+
 function getCart(token) {
   const config = createConfig(token);
   return axios.get(`${BASE_URL}/cart`, config);
@@ -34,4 +39,4 @@ function userCheckout(body, token) {
   return axios.post(`${BASE_URL}/checkout`, body, config);
 }
 
-export { signIn, signUp, getProducts, addToCart, getCart, userCheckout };
+export { signIn, signUp, getProducts, addToCart, getCart, userCheckout, removeFromCart };

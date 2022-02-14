@@ -9,6 +9,7 @@ const Item = styled.div`
   flex-direction: row;
   height: 90px;
   margin: 5px 0;
+  position: relative;
 
   div {
     position: relative;
@@ -46,7 +47,23 @@ const Item = styled.div`
   span {
     min-width: 25%;
     text-align: center;
-    line-height: 30px;
+    line-height: 20px;
+  }
+
+  strong {
+    text-decoration: underline;
+    line-height: 20px;
+  }
+
+  svg {
+    position: absolute;
+    top: 7px;
+    left: 60px;
+    width: 20px;
+    height: 20px;
+    color: #F00;
+    background-color: #FFF;
+    cursor: pointer;
   }
 `;
 

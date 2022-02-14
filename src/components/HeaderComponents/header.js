@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import logo from "../../assets/images/logo-meu-velho-completo.png";
 import { Link } from "react-router-dom";
 import { IoExit } from "react-icons/io5";
-
 import useAuth from "../../hooks/useAuth.js";
 
 export default function TopBar() {
@@ -11,6 +10,7 @@ export default function TopBar() {
     function logOut() {
         storeLogin(null);
         localStorage.removeItem('auth');
+        window.location.reload(false);
     }
 
     return (

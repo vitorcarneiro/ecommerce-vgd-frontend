@@ -13,12 +13,14 @@ import logo from "../../assets/images/logo-meu-velho-completo.png";
 import { IoLogIn } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import useAuth from "../../hooks/useAuth";
-import { getCart } from "../../services/api";
+import { getCart, removeFromCart } from "../../services/api";
+import { BsFillXCircleFill } from 'react-icons/bs';
 
 export default function Cart() {
   const [userCart, setUserCart] = useState([]);
   const [total, setTotal] = useState(0);
   const [items, setItems] = useState(0);
+  const [changeCart, setChangeCart] = useState(0);
   const { auth } = useAuth();
 
   const navigate = useNavigate();
@@ -32,7 +34,6 @@ export default function Cart() {
 
       promise.then((response) => {
         setUserCart(response.data);
-        console.log(response.data[0].cart);
         getTotal(response.data[0].cart);
       });
 
@@ -40,7 +41,7 @@ export default function Cart() {
         console.log(error);
       });
     }
-  }, []);
+  }, [auth, changeCart]);
 
   function getTotal(items) {
     let sum = 0;
@@ -49,6 +50,19 @@ export default function Cart() {
     }
     setItems(items.length);
     setTotal(parseFloat(sum).toFixed(2));
+  }
+
+  async function removeItemFromCart(e, id) {
+    e.preventDefault();
+
+    const promise = removeFromCart({id}, auth.token);
+    promise.then((res) => {
+      setChangeCart(changeCart + 1);
+      console.log("Item adicionado ao carrinho", res);
+    });
+    promise.catch((err) => {
+      console.log(err.response);
+    });
   }
 
   return (
@@ -81,6 +95,9 @@ export default function Cart() {
               {userCart[0].cart.map((cartItem) => (
                 <Item key={cartItem._id}>
                   <img src={cartItem.img} alt="item" />
+                  <BsFillXCircleFill
+                    onClick={(e) => removeItemFromCart(e, cartItem._id)}
+                  />
                   <p>{cartItem.name}</p>
                   <span>
                     <p>{cartItem.cartQTY} x R${cartItem.price.toFixed(2)} = </p>

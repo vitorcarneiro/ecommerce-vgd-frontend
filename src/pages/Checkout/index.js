@@ -29,8 +29,6 @@ export default function Checkout() {
     }
   });
 
-  console.log(addressData);
-
   async function checkout(e) {
     e.preventDefault();
 
@@ -49,8 +47,6 @@ export default function Checkout() {
   function handleChange(e) {
     setAddressData({ ...addressData, [e.target.name]: e.target.value });
   }
-
-  console.log(addressData);
 
   return (
     <>
