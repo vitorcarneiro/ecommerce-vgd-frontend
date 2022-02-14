@@ -29,7 +29,7 @@ export default function Cart() {
   useEffect(() => {
     if (auth !== null) {
       axios
-        .get("http://localhost:5000/cart", {
+        .get("https://ecommerce-vgd-backend.herokuapp.com/cart", {
           headers: {
             Authorization: `Bearer ${auth.token}`,
           },
@@ -91,7 +91,7 @@ export default function Cart() {
                 <img src={cartItem.img} alt="item" />
                 <p>{cartItem.name}</p>
                 <span>
-                  <strong>R${cartItem.price}</strong>
+                  <strong>R${cartItem.price.toFixed(2)}</strong>
                 </span>
               </Item>
             ))}
