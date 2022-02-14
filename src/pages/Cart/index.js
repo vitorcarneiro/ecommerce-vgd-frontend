@@ -6,14 +6,14 @@ import {
   ItemsContainer,
   Footer,
   Button,
+  EmptyCart,
 } from "../../components/CartComponents";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo-meu-velho-completo.png";
 import { IoLogIn } from "react-icons/io5";
 import { useEffect, useState } from "react";
-import { getCart } from "../../services/api.js";
-import axios from "axios";
 import useAuth from "../../hooks/useAuth";
+import { getCart } from "../../services/api";
 
 export default function Cart() {
   const [userCart, setUserCart] = useState([]);
@@ -21,42 +21,31 @@ export default function Cart() {
   const [items, setItems] = useState(0);
   const { auth } = useAuth();
 
-  const confirmOrder = (e) => {
-    e.preventDefault();
-    alert("Pedido realizado");
-  };
+  const navigate = useNavigate();
 
+  function checkout(e) {
+    navigate("/checkout");
+  }
   useEffect(() => {
     if (auth !== null) {
-      axios
-        .get("https://ecommerce-vgd-backend.herokuapp.com/cart", {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        })
-        .then((res) => {
-          setUserCart(res.data);
-          getTotal(res.data[0].cart);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const promise = getCart(auth.token);
+
+      promise.then((response) => {
+        setUserCart(response.data);
+        console.log(response.data[0].cart);
+        getTotal(response.data[0].cart);
+      });
+
+      promise.catch((error) => {
+        console.log(error);
+      });
     }
-    //  const promise = getCart(token);
-
-    //  promise.then((response) => {
-    //    setUserCart(response.data);
-    //  });
-
-    //  promise.catch((error) => {
-    //    console.log(error);
-    //  });
   }, []);
 
   function getTotal(items) {
     let sum = 0;
     for (let i = 0; i < items.length; i++) {
-      sum += items[i].price;
+      sum += items[i].price * items[i].cartQTY;
     }
     setItems(items.length);
     setTotal(parseFloat(sum).toFixed(2));
@@ -83,44 +72,48 @@ export default function Cart() {
           </div>
         </Header>
         {userCart.length === 0 ? (
-          <h1>Adicione produtos ao carrinho</h1>
+          <EmptyCart>
+            <p>Seu carrinho esta vazio...</p>
+          </EmptyCart>
         ) : (
-          <ItemsContainer>
-            {userCart[0].cart.map((cartItem) => (
-              <Item key={cartItem._id}>
-                <img src={cartItem.img} alt="item" />
-                <p>{cartItem.name}</p>
-                <span>
-                  <strong>R${cartItem.price.toFixed(2)}</strong>
-                </span>
-              </Item>
-            ))}
-          </ItemsContainer>
+          <>
+            <ItemsContainer>
+              {userCart[0].cart.map((cartItem) => (
+                <Item key={cartItem._id}>
+                  <img src={cartItem.img} alt="item" />
+                  <p>{cartItem.name}</p>
+                  <span>
+                    <p>{cartItem.cartQTY} x R${cartItem.price.toFixed(2)} = </p>
+                    <strong>R${(cartItem.cartQTY * cartItem.price).toFixed(2)}</strong>
+                  </span>
+                </Item>
+              ))}
+            </ItemsContainer>
+            <Footer>
+              <hr />
+              <div>
+                <p>Subtotal</p>
+                <p>
+                  <strong>{total}</strong>
+                </p>
+              </div>
+              <div>
+                <p>Frete</p>
+                <p>
+                  <strong>Gratis</strong>
+                </p>
+              </div>
+              <hr />
+              <div>
+                <p>
+                  <strong>Total</strong>
+                </p>
+                <span>R$ {total}</span>
+              </div>
+            </Footer>
+            <Button onClick={() => checkout()}>Checkout</Button>
+          </>
         )}
-
-        <Footer>
-          <hr />
-          <div>
-            <p>Subtotal</p>
-            <p>
-              <strong>{total}</strong>
-            </p>
-          </div>
-          <div>
-            <p>Frete</p>
-            <p>
-              <strong>Gratis</strong>
-            </p>
-          </div>
-          <hr />
-          <div>
-            <p>
-              <strong>Total</strong>
-            </p>
-            <span>R$ {total}</span>
-          </div>
-        </Footer>
-        <Button onClick={confirmOrder}>Fazer pedido</Button>
       </Container>
     </>
   );

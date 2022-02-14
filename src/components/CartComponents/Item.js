@@ -34,7 +34,7 @@ const Item = styled.div`
   }
 
   p {
-    min-width: 55%;
+    min-width: 25%;
     max-height: 70px;
     display: -webkit-box;
     overflow: hidden;
@@ -46,6 +46,7 @@ const Item = styled.div`
   span {
     min-width: 25%;
     text-align: center;
+    line-height: 30px;
   }
 `;
 
