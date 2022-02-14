@@ -6,6 +6,7 @@ import {
   ItemsContainer,
   Footer,
   Button,
+  EmptyCart,
 } from "../../components/CartComponents";
 import { Link } from "react-router-dom";
 import logo from "../../assets/images/logo-meu-velho-completo.png";
@@ -83,44 +84,47 @@ export default function Cart() {
           </div>
         </Header>
         {userCart.length === 0 ? (
-          <h1>Adicione produtos ao carrinho</h1>
+          <EmptyCart>
+            <p>Seu carrinho esta vazio...</p>
+          </EmptyCart>
         ) : (
-          <ItemsContainer>
-            {userCart[0].cart.map((cartItem) => (
-              <Item key={cartItem._id}>
-                <img src={cartItem.img} alt="item" />
-                <p>{cartItem.name}</p>
-                <span>
-                  <strong>R${cartItem.price}</strong>
-                </span>
-              </Item>
-            ))}
-          </ItemsContainer>
+          <>
+            <ItemsContainer>
+              {userCart[0].cart.map((cartItem) => (
+                <Item key={cartItem._id}>
+                  <img src={cartItem.img} alt="item" />
+                  <p>{cartItem.name}</p>
+                  <span>
+                    <strong>R${cartItem.price}</strong>
+                  </span>
+                </Item>
+              ))}
+            </ItemsContainer>
+            <Footer>
+              <hr />
+              <div>
+                <p>Subtotal</p>
+                <p>
+                  <strong>{total}</strong>
+                </p>
+              </div>
+              <div>
+                <p>Frete</p>
+                <p>
+                  <strong>Gratis</strong>
+                </p>
+              </div>
+              <hr />
+              <div>
+                <p>
+                  <strong>Total</strong>
+                </p>
+                <span>R$ {total}</span>
+              </div>
+            </Footer>
+            <Button onClick={confirmOrder}>Checkout</Button>
+          </>
         )}
-
-        <Footer>
-          <hr />
-          <div>
-            <p>Subtotal</p>
-            <p>
-              <strong>{total}</strong>
-            </p>
-          </div>
-          <div>
-            <p>Frete</p>
-            <p>
-              <strong>Gratis</strong>
-            </p>
-          </div>
-          <hr />
-          <div>
-            <p>
-              <strong>Total</strong>
-            </p>
-            <span>R$ {total}</span>
-          </div>
-        </Footer>
-        <Button onClick={confirmOrder}>Fazer pedido</Button>
       </Container>
     </>
   );
