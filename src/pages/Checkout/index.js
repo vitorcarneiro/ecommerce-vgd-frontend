@@ -6,8 +6,8 @@ import {
   Input,
 } from "../../components/FormComponents";
 import useAuth from "../../hooks/useAuth.js";
-import axios from "axios";
 import { useNavigate } from "react-router";
+import { userCheckout } from "../../services/api";
 
 export default function Checkout() {
   const { auth } = useAuth();
@@ -34,27 +34,16 @@ export default function Checkout() {
   async function checkout(e) {
     e.preventDefault();
 
-    axios
-      .post(
-        "http://ecommerce-vgd-backend.herokuapp.com/checkout",
-        {
-          addressData,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log("Endereco registrado!", res);
-        alert("Obrigado por comprar conosco! Volte Sempre! ");
-        navigate("/");
-      })
-      .catch((err) => {
-        alert("Erro! Faça login novamente!");
-        navigate("/cart");
-      });
+    const promise = userCheckout({ addressData }, auth.token);
+    promise.then(() => {
+      console.log("Endereco registrado!");
+      alert("Obrigado por comprar conosco! Volte Sempre! ");
+      navigate("/");
+    });
+    promise.catch(() => {
+      alert("Erro! Faça login novamente!");
+      navigate("/cart");
+    });
   }
 
   function handleChange(e) {

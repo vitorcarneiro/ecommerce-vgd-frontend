@@ -12,8 +12,8 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/images/logo-meu-velho-completo.png";
 import { IoLogIn } from "react-icons/io5";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import useAuth from "../../hooks/useAuth";
+import { getCart } from "../../services/api";
 
 export default function Cart() {
   const [userCart, setUserCart] = useState([]);
@@ -28,29 +28,17 @@ export default function Cart() {
   }
   useEffect(() => {
     if (auth !== null) {
-      axios
-        .get("http://ecommerce-vgd-backend.herokuapp.com/cart", {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        })
-        .then((res) => {
-          setUserCart(res.data);
-          getTotal(res.data[0].cart);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const promise = getCart(auth.token);
+
+      promise.then((response) => {
+        setUserCart(response.data);
+        getTotal(response.data[0].cart);
+      });
+
+      promise.catch((error) => {
+        console.log(error);
+      });
     }
-    //  const promise = getCart(token);
-
-    //  promise.then((response) => {
-    //    setUserCart(response.data);
-    //  });
-
-    //  promise.catch((error) => {
-    //    console.log(error);
-    //  });
   }, []);
 
   function getTotal(items) {

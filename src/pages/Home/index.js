@@ -7,12 +7,11 @@ import {
   BsFillCartPlusFill,
 } from "react-icons/bs";
 import { TailSpin } from "react-loader-spinner";
-import axios from "axios";
 
 import Header from "../../components/HeaderComponents/header.js";
 import Footer from "../../components/FooterComponents/footer.js";
 import video from "../../assets/videos/instagram-video.mp4";
-import { getProducts } from "../../services/api.js";
+import { addToCart, getProducts } from "../../services/api.js";
 import useAuth from "../../hooks/useAuth.js";
 
 export default function Home() {
@@ -52,26 +51,18 @@ export default function Home() {
 
   async function addItemToCart(e, id) {
     e.preventDefault();
-    console.log("token", auth.token);
-
-    axios
-      .post(
-        "http://ecommerce-vgd-backend.herokuapp.com/cart",
-        {
-          id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      )
-      .then((res) => {
+    if (auth) {
+      const promise = addToCart({ id }, auth.token);
+      promise.then((res) => {
         console.log("Item adicionado ao carrinho", res);
-      })
-      .catch((err) => {
+      });
+      promise.catch((err) => {
+        alert("Faca login!");
         console.log(err);
       });
+    } else {
+      alert("Faca login!");
+    }
   }
 
   return (
