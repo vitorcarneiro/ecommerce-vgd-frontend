@@ -1,14 +1,19 @@
 import styled from 'styled-components';
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 import { BsFillCartFill } from "react-icons/bs";
 
 export default function FooterCart() {
+    const navigate = useNavigate();
 
         return (
             <Footer>
-                <BsFillCartFill/>
-                <div>
-                    0
-                </div>
+                <StyledLink to="/cart">
+                    <BsFillCartFill/>
+                    <div>
+                        0
+                    </div>
+                </StyledLink>
             </Footer>
         );
 }
@@ -41,4 +46,8 @@ const Footer = styled.footer`
         color: #FFF;
         font-weight: 700;
     }
+`;
+
+const StyledLink = styled(Link)`
+
 `;

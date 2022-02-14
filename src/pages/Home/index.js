@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 import styled from 'styled-components';
 import ReactPlayer from "react-player";
 import { BsSearch, BsFillCartDashFill, BsFillCartPlusFill } from "react-icons/bs";
@@ -17,6 +18,7 @@ export default function Home() {
     const [searchTerm, setSearchTerm] = useState('');
     const [typeFilter, setTypeFilter] = useState('GERAL');
     const { auth, storeLogin } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         setIsLoading(true);
@@ -50,7 +52,10 @@ export default function Home() {
 
     async function addItemToCart(e, id) {
       e.preventDefault();
-      console.log("token", auth.token);
+
+      if (!auth) {
+        navigate("/login");
+      }
   
       axios
         .post(
