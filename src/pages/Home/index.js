@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
 import styled from 'styled-components';
 import ReactPlayer from "react-player";
 import {
   BsSearch,
-  BsFillCartDashFill,
   BsFillCartPlusFill,
 } from "react-icons/bs";
 import { TailSpin } from "react-loader-spinner";
@@ -21,6 +19,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("GERAL");
+  const [cart, setCart] = useState([]);
   const [qtyItems, setQtylItems] = useState(0);
   const [changeCart, setChangeCart] = useState(0);
   const { auth } = useAuth();
@@ -48,6 +47,8 @@ export default function Home() {
       const promise = getCart(auth.token);
 
       promise.then((response) => {
+        console.log(response.data[0].cart)
+        setCart(response.data[0].cart);
         getQtyItems(response.data[0].cart);
       });
 
@@ -55,7 +56,7 @@ export default function Home() {
         console.log(error);
       });
     }
-  }, [changeCart]);
+  }, [changeCart, auth]);
 
   function getQtyItems(items) {
     let sum = 0;
@@ -89,6 +90,16 @@ export default function Home() {
       });
     } else {
       alert("Faca login!");
+    }
+  }
+
+  function getItemQty(id) {
+    const item = cart?.find( ( { _id } ) => _id === id);
+    
+    if (item) {
+      return item.cartQTY;
+    } else {
+      return 0;
     }
   }
 
@@ -127,15 +138,14 @@ export default function Home() {
 
                         <Specs>
                           <h1>{product.name}</h1>
-                          <p>{product.price.toFixed(2).replace(".", ",")}</p>
+                          <p>R${product.price.toFixed(2).replace(".", ",")}</p>
 
-                          <BsFillCartDashFill className="cartMinus" />
                           <BsFillCartPlusFill
                             className="cartAdd"
                             onClick={(e) => addItemToCart(e, product._id)}
                           />
 
-                          <div className="numberInCart">0</div>
+                          <div className="numberInCart">{getItemQty(product._id)}</div>
                         </Specs>
                       </ProductContainer>
                     )
@@ -193,15 +203,14 @@ export default function Home() {
 
                       <Specs className="small">
                         <h1>{product.name}</h1>
-                        <p>{product.price.toFixed(2).replace(".", ",")}</p>
+                        <p>R${product.price.toFixed(2).replace(".", ",")}</p>
 
-                        <BsFillCartDashFill className="cartMinus" />
                         <BsFillCartPlusFill
                           className="cartAdd"
                           onClick={(e) => addItemToCart(e, product._id)}
                         />
 
-                        <div className="numberInCart">0</div>
+                        <div className="numberInCart">{getItemQty(product._id)}</div>
                       </Specs>
                     </OtherProduct>
                   ))}
@@ -374,6 +383,7 @@ const Specs = styled.div`
 
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
 
   position: relative;
 
@@ -387,39 +397,19 @@ const Specs = styled.div`
   }
 
   p {
-    margin: 15px auto 0 auto;
     font-weight: 1000;
     color: #004bd8;
   }
 
   .cartAdd {
-    width: 25px;
-    height: 25px;
+    width: 30px;
+    height: 30px;
 
     color: #004bd8;
 
     position: absolute;
     bottom: 13px;
     right: 15px;
-  }
-
-  .cartMinus {
-    width: 25px;
-    height: 25px;
-
-    color: #f00;
-
-    position: absolute;
-    bottom: 13px;
-    left: 15px;
-
-    -moz-transform: scale(-1, 1);
-    -webkit-transform: scale(-1, 1);
-    -o-transform: scale(-1, 1);
-    -ms-transform: scale(-1, 1);
-    transform: scale(-1, 1);
-
-    cursor: pointer;
   }
 
   .numberInCart {
@@ -485,25 +475,12 @@ const OtherProduct = styled.div`
       margin-bottom: 0px;
     }
 
-    p {
-      margin: auto;
-      margin-top: -8px;
-    }
-
     svg {
       position: absolute;
+      bottom: 4px;
+      right: 0;
       width: 25px;
       height: 25px;
-    }
-
-    .cartAdd {
-      bottom: 10px;
-      right: 5px;
-    }
-
-    .cartMinus {
-      bottom: 10px;
-      left: 5px;
     }
 
     .numberInCart {
