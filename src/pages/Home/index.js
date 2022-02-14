@@ -555,4 +555,3 @@ const Footer = styled.footer`
     font-weight: 700;
   }
 `;
-
