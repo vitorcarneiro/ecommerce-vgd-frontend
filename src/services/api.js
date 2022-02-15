@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_API_BASE_URL;
-//const BASE_URL = "http://ecommerce-vgd-backend.herokuapp.com";
 
 function createConfig(token) {
   return { headers: { Authorization: `Bearer ${token}` } };
@@ -24,9 +23,9 @@ function addToCart(body, token) {
   return axios.post(`${BASE_URL}/cart`, body, config);
 }
 
-function removeFromCart(body, token) {
+function removeFromCart(id, token) {
   const config = createConfig(token);
-  return axios.post(`${BASE_URL}/deleteItem`, body, config);
+  return axios.delete(`${BASE_URL}/cart/${id}`, config);
 }
 
 function getCart(token) {

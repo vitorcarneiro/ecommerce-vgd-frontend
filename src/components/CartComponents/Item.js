@@ -63,6 +63,7 @@ const Item = styled.div`
     height: 20px;
     color: #F00;
     background-color: #FFF;
+    border-radius: 50%;
     cursor: pointer;
   }
 `;

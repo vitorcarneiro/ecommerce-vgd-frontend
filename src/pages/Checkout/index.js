@@ -34,7 +34,6 @@ export default function Checkout() {
 
     const promise = userCheckout({ addressData }, auth.token);
     promise.then(() => {
-      console.log("Endereco registrado!");
       alert("Obrigado por comprar conosco! Volte Sempre! ");
       navigate("/");
     });

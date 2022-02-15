@@ -54,11 +54,9 @@ export default function Cart() {
 
   async function removeItemFromCart(e, id) {
     e.preventDefault();
-
-    const promise = removeFromCart({id}, auth.token);
+    const promise = removeFromCart(id, auth.token);
     promise.then((res) => {
       setChangeCart(changeCart + 1);
-      console.log("Item adicionado ao carrinho", res);
     });
     promise.catch((err) => {
       console.log(err.response);

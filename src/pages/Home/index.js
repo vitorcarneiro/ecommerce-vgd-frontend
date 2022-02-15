@@ -47,7 +47,6 @@ export default function Home() {
       const promise = getCart(auth.token);
 
       promise.then((response) => {
-        console.log(response.data[0].cart)
         setCart(response.data[0].cart);
         getQtyItems(response.data[0].cart);
       });
@@ -82,7 +81,6 @@ export default function Home() {
       const promise = addToCart({ id }, auth.token);
       promise.then((res) => {
         setChangeCart(changeCart + 1);
-        console.log("Item adicionado ao carrinho", res);
       });
       promise.catch((err) => {
         alert("Faca login!");
