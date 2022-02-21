@@ -2,7 +2,7 @@
 
 Meu Velho Material de Construcao is a Hardware and Paint Store, where you buy the best products with the lowest prices.
 
-It's a mobile ecommerce app, you can see it [here](https://ecommerce-vgd-frontend.vercel.app).
+It's a mobile ecommerce app, you can see it [here](https://meuvelho.com/).
 
 This app was built and designed by [Pedro Peroni](https://github.com/pedrohperoni) and [Vitor Carneiro](https://github.com/vitorcarneiro).
 
@@ -47,4 +47,4 @@ The following tools and frameworks were used in the construction of the project:
 
 ## How to run
 
-You can access the deploy [here](https://ecommerce-vgd-frontend.vercel.app/).
+You can access the deploy [here](https://meuvelho.com/).
