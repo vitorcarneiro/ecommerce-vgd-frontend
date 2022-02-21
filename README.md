@@ -1,6 +1,6 @@
 # Ecommerce-Meu-Velho-Material-de-Construcao
 
-Meu Velho Material de Construcao is a Hardware and Paint Store, where you buy the best products with the lowest price.
+Meu Velho Material de Construcao is a Hardware and Paint Store, where you buy the best products with the lowest prices.
 
 It's a mobile ecommerce app, you can see it [here](https://ecommerce-vgd-frontend.vercel.app).
 
@@ -25,8 +25,6 @@ This repository contains the front-end code. You can find the back-end code [her
 - Home
 - Cart
 - Checkout
-- Send a normal message
-- Send a private message
 - Save cart and user info on database mongoDB
 
 ## Technologies
